@@ -47,14 +47,20 @@
 --shadow:0 14px 36px -16px rgba(0,0,0,.72);
 }
 html{scroll-behavior:smooth}
-body{font-family:'Source Sans 3',sans-serif;color:var(--text);background:var(--bg);overflow-x:hidden;position:relative}
-/* marble veining — subtle gold veins in a dark canvas, fixed so it breathes under the whole page */
-body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+body{font-family:'Source Sans 3',sans-serif;color:var(--text);background:#090d18;overflow-x:hidden;position:relative}
+/* MARBLE BASE — polished dark stone with a soft sheen + cool/gold pooling */
+body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;
 background:
- radial-gradient(circle at 18% 22%,var(--vein),transparent 42%),
- radial-gradient(circle at 82% 68%,var(--vein),transparent 38%),
- radial-gradient(circle at 60% 92%,rgba(47,116,214,.04),transparent 45%),
- linear-gradient(165deg,var(--marble-1) 0%,var(--bg) 55%,var(--marble-1) 100%);}
+ radial-gradient(120% 95% at 22% 6%,rgba(60,70,104,.45),transparent 55%),
+ radial-gradient(95% 80% at 88% 24%,rgba(212,176,102,.12),transparent 52%),
+ radial-gradient(90% 90% at 72% 102%,rgba(47,116,214,.08),transparent 55%),
+ radial-gradient(70% 60% at 50% 50%,rgba(255,250,235,.025),transparent 60%),
+ linear-gradient(160deg,#171c30 0%,#0c1020 46%,#080c16 70%,#12172a 100%);}
+/* MARBLE VEINS — fractal-noise gold veining (no stock image), blended like polished stone */
+body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;mix-blend-mode:screen;
+background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='760' height='760'><filter id='v' x='0' y='0' width='100%25' height='100%25'><feTurbulence type='fractalNoise' baseFrequency='0.009 0.024' numOctaves='5' seed='14' stitchTiles='stitch' result='n'/><feColorMatrix in='n' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.15 -0.46' result='m'/><feFlood flood-color='%23d4b066' result='g'/><feComposite in='g' in2='m' operator='in'/></filter><rect width='100%25' height='100%25' filter='url(%23v)'/></svg>"),
+ url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='900' height='900'><filter id='w' x='0' y='0' width='100%25' height='100%25'><feTurbulence type='fractalNoise' baseFrequency='0.006 0.014' numOctaves='4' seed='3' stitchTiles='stitch' result='n'/><feColorMatrix in='n' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.9 -0.52' result='m'/><feFlood flood-color='%23aeb9d6' result='g'/><feComposite in='g' in2='m' operator='in'/></filter><rect width='100%25' height='100%25' filter='url(%23w)'/></svg>");
+background-size:760px 760px,900px 900px;background-position:0 0,180px 90px;}
 h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:700}
 a{text-decoration:none;color:inherit}
 img{max-width:100%;display:block}
@@ -90,7 +96,7 @@ nav{position:fixed;top:0;left:0;width:100%;z-index:1000;background:rgba(10,14,26
 /* secondary = gold-framed outline */
 .btn-outline-w{display:inline-block;border:1px solid var(--gold-line);color:var(--gold);padding:16px 40px;font-size:16px;font-weight:600;border-radius:10px;transition:all .3s}
 .btn-outline-w:hover{background:var(--gold-soft);border-color:var(--gold)}
-.hero-images{display:grid;grid-template-columns:1fr 1fr;gap:14px;position:relative;z-index:2}
+.hero-images{display:grid;grid-template-columns:1fr;gap:16px;position:relative;z-index:2}
 .hero-images img{border-radius:var(--radius-sm);border:1px solid var(--gold-line);box-shadow:var(--shadow);transition:transform .3s}
 .hero-images img:first-child{grid-column:1/-1}
 .hero-images img:hover{transform:scale(1.02)}
@@ -253,6 +259,33 @@ section + section::before{content:'';position:absolute;top:0;left:50%;transform:
 .form-success h3{color:var(--gold);margin-bottom:12px}
 .form-success p{color:var(--text-dim);font-size:16px}
 
+/* ===== PAYMENT (plug-and-play checkout placeholder) ===== */
+.payment{position:relative;overflow:hidden}
+.payment::before{content:'';position:absolute;bottom:-200px;right:-150px;width:540px;height:540px;background:radial-gradient(circle,var(--gold-glow),transparent 70%);opacity:.35;pointer-events:none}
+.checkout-card{max-width:560px;margin:48px auto 0;background:var(--marble-2);border:1px solid var(--gold-line);border-radius:var(--radius);padding:40px 38px;box-shadow:var(--shadow);position:relative}
+.pay-badge{position:absolute;top:16px;right:16px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-line);border-radius:20px;padding:4px 11px;background:var(--gold-soft);font-weight:700}
+.checkout-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:26px}
+.checkout-head h3{font-size:23px;color:var(--text);font-weight:500}
+.checkout-plan{text-align:right;white-space:nowrap}
+.checkout-plan .cp-name{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700}
+.checkout-plan .cp-price{font-family:'Playfair Display',serif;font-size:26px;color:var(--text);font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px}
+.checkout-plan .cp-price span{font-size:13px;color:var(--text-faint);font-family:'Source Sans 3',sans-serif;font-weight:400}
+.pay-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.pay-row.full{grid-template-columns:1fr}
+.pay-group{display:flex;flex-direction:column}
+.pay-group label{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px}
+.pay-field{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:0 14px;min-height:48px;display:flex;align-items:center;justify-content:space-between;transition:border-color .3s,box-shadow .3s}
+.pay-field:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-bg)}
+.pay-field input,.pay-field select{background:transparent;border:none;outline:none;color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:15px;width:100%;padding:13px 0}
+.pay-field select{cursor:pointer;appearance:none}
+.pay-field input::placeholder{color:var(--text-faint)}
+.pay-field option{background:var(--marble-1);color:var(--text)}
+.pay-field .card-icons{display:flex;gap:7px;flex-shrink:0;margin-left:10px}
+.pay-field .card-icons span{font-size:9px;font-weight:700;letter-spacing:.5px;color:var(--text-faint);border:1px solid var(--border);border-radius:3px;padding:2px 5px}
+.pay-btn{width:100%;margin-top:10px;padding:16px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;letter-spacing:.5px;cursor:pointer;transition:all .3s;box-shadow:0 10px 30px -12px var(--blue-glow)}
+.pay-btn:hover{background:var(--blue-light);transform:translateY(-2px);box-shadow:0 16px 40px -12px var(--blue-glow)}
+.pay-secure{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px;font-size:12px;color:var(--text-faint);letter-spacing:.3px}
+
 /* ===== GUARANTEES ===== */
 .guarantees{text-align:center}
 .guarantee-cards{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:48px;max-width:800px;margin-left:auto;margin-right:auto}
@@ -348,9 +381,8 @@ section{padding:60px 20px}
 <div class="hero-phone">(214) 943-1099</div>
 </div>
 <div class="hero-images">
-<img src="FIANCIAL_PICS_FOR_WEBSITE.png" alt="Professional Financial Reporting Dashboard">
-<img src="market_trends.png" alt="Market Trends Analysis">
-<img src="financial_statement_6.png" alt="Financial Statement Reports">
+<img src="FIANCIAL_PICS_FOR_WEBSITE.webp" alt="Annual revenue performance — sample financial dashboard">
+<img src="market_trends.webp" alt="Key financial metrics — sample dashboard">
 </div>
 </div>
 </section>
@@ -457,12 +489,12 @@ section{padding:60px 20px}
 <div class="section-title">Reports Your Business Has Never Seen Before</div>
 <div class="section-sub">Every month, you will receive professional-grade financial reports that give you a complete picture of where your business stands and where it is heading.</div>
 <div class="reports-showcase">
-<div class="report-card"><img src="financial_statement.jpg" alt="Balance Sheet"><div class="report-label">Balance Sheet</div></div>
-<div class="report-card"><img src="financial_statements_for_site.jpg" alt="Profit and Loss"><div class="report-label">Profit and Loss Statement</div></div>
-<div class="report-card"><img src="financial_statements_site_2.jpg" alt="Cash Flow"><div class="report-label">Cash Flow Analysis</div></div>
-<div class="report-card"><img src="financial_statements_4.jpg" alt="Budget Analysis"><div class="report-label">Budget vs Actual Analysis</div></div>
-<div class="report-card"><img src="financial_pics.png" alt="Dashboard"><div class="report-label">Executive Financial Dashboard</div></div>
-<div class="report-card"><img src="cfo_recommends_stite_5.jpg" alt="CFO Recommendations"><div class="report-label">CFO Recommendations</div></div>
+<div class="report-card"><img src="financial_statement.webp" alt="Balance Sheet" loading="lazy"><div class="report-label">Balance Sheet</div></div>
+<div class="report-card"><img src="financial_statements_for_site.webp" alt="Profit and Loss" loading="lazy"><div class="report-label">Profit and Loss Statement</div></div>
+<div class="report-card"><img src="financial_statements_site_2.webp" alt="Cash Flow" loading="lazy"><div class="report-label">Cash Flow Analysis</div></div>
+<div class="report-card"><img src="financial_statements_4.webp" alt="Budget Analysis" loading="lazy"><div class="report-label">Budget vs Actual Analysis</div></div>
+<div class="report-card"><img src="financial_pics.webp" alt="Dashboard" loading="lazy"><div class="report-label">Executive Financial Dashboard</div></div>
+<div class="report-card"><img src="cfo_recommends_stite_5.webp" alt="CFO Recommendations" loading="lazy"><div class="report-label">CFO Recommendations</div></div>
 </div>
 </div>
 </section>
@@ -672,6 +704,89 @@ section{padding:60px 20px}
 </div>
 </div>
 </div>
+</section>
+
+<!-- ==========================================================
+     SECURE PAYMENT  (plug-and-play placeholder)
+     Reserved checkout. INERT until the gateway is connected.
+     To activate with Authorize.net Accept.js:
+       1. Add to <head>:  <script src="https://js.authorize.net/v1/Accept.js"></script>
+          (sandbox: https://jstest.authorize.net/v1/Accept.js)
+       2. Drop in your API Login ID + Public Client Key.
+       3. In handlePayment(): build the secureData object from the fields
+          below, call Accept.dispatchData(secureData, responseHandler),
+          then POST the returned opaqueData (nonce) to your server, which
+          charges via createTransactionRequest / ARB (recurring) API.
+       *  For SAQ-A (card data never in your DOM), swap each .pay-field
+          input for an Authorize.net Hosted Payment Field iframe container.
+     ========================================================== -->
+<section class="payment" id="payment">
+<div class="section-inner" style="text-align:center">
+<div class="section-label">Secure Checkout</div>
+<div class="section-title">Activate Your Plan</div>
+<div class="section-sub" style="margin:0 auto">A reserved, encrypted checkout. The moment our payment gateway is connected, card details are tokenized and processed securely &mdash; raw card data never touches this site.</div>
+</div>
+
+<form class="checkout-card" id="checkoutForm" onsubmit="handlePayment(event)" autocomplete="off">
+<div class="pay-badge">Activating Soon</div>
+<div class="checkout-head">
+<div>
+<h3>Payment Details</h3>
+<div style="font-size:13px;color:var(--text-faint);margin-top:4px">Monthly subscription &middot; cancel anytime</div>
+</div>
+<div class="checkout-plan">
+<div class="cp-name" id="coPlanName">Growth Plan</div>
+<div class="cp-price" id="coPlanPrice">$450<span>/mo</span></div>
+</div>
+</div>
+
+<div class="pay-row full">
+<div class="pay-group">
+<label for="coName">Name on Card</label>
+<div class="pay-field"><input type="text" id="coName" placeholder="Full name" autocomplete="cc-name"></div>
+</div>
+</div>
+
+<div class="pay-row full">
+<div class="pay-group">
+<label for="coNumber">Card Number</label>
+<!-- PLUG-AND-PLAY: replace this .pay-field with the Authorize.net Hosted Field container (e.g. <div id="cardNumber"></div>) for SAQ-A -->
+<div class="pay-field">
+<input type="text" id="coNumber" placeholder="1234 5678 9012 3456" inputmode="numeric" autocomplete="cc-number" maxlength="19">
+<span class="card-icons"><span>VISA</span><span>MC</span><span>AMEX</span><span>DISC</span></span>
+</div>
+</div>
+</div>
+
+<div class="pay-row">
+<div class="pay-group">
+<label for="coExp">Expiry</label>
+<div class="pay-field"><input type="text" id="coExp" placeholder="MM / YY" inputmode="numeric" autocomplete="cc-exp" maxlength="7"></div>
+</div>
+<div class="pay-group">
+<label for="coCvc">CVC</label>
+<div class="pay-field"><input type="text" id="coCvc" placeholder="123" inputmode="numeric" autocomplete="cc-csc" maxlength="4"></div>
+</div>
+</div>
+
+<div class="pay-row">
+<div class="pay-group">
+<label for="coZip">Billing ZIP</label>
+<div class="pay-field"><input type="text" id="coZip" placeholder="75001" inputmode="numeric" autocomplete="postal-code" maxlength="10"></div>
+</div>
+<div class="pay-group">
+<label for="coPlanSelect">Plan</label>
+<div class="pay-field"><select id="coPlanSelect" onchange="updatePlanSummary()">
+<option value="Starter|$250">Starter &mdash; $250/mo</option>
+<option value="Growth|$450" selected>Growth &mdash; $450/mo</option>
+<option value="Premium|$750">Premium &mdash; $750/mo</option>
+</select></div>
+</div>
+</div>
+
+<button type="submit" class="pay-btn" id="coSubmit">Activate My Plan</button>
+<div class="pay-secure">&#128274;&nbsp; 256-bit encrypted &middot; Powered by Authorize.net</div>
+</form>
 </section>
 
 <!-- SIGNUP FORM -->
@@ -948,6 +1063,39 @@ document.querySelectorAll('input[type="tel"]').forEach(function(input) {
     e.target.value = val;
   });
 });
+
+// ===== Checkout placeholder (inert until payment gateway is connected) =====
+function updatePlanSummary() {
+  var parts = document.getElementById('coPlanSelect').value.split('|');
+  document.getElementById('coPlanName').textContent = parts[0] + ' Plan';
+  document.getElementById('coPlanPrice').innerHTML = parts[1] + '<span>/mo</span>';
+}
+function handlePayment(e) {
+  e.preventDefault();
+  // PLUG-AND-PLAY: Accept.dispatchData() -> POST nonce to server goes here.
+  var btn = document.getElementById('coSubmit');
+  var original = 'Activate My Plan';
+  btn.textContent = 'Secure checkout activates soon — call (214) 943-1099';
+  btn.style.background = 'var(--gold-dim)';
+  setTimeout(function(){ btn.textContent = original; btn.style.background = ''; }, 3800);
+}
+// light formatting for the placeholder card fields
+(function(){
+  var num = document.getElementById('coNumber');
+  if (num) num.addEventListener('input', function(e){
+    var v = e.target.value.replace(/\D/g,'').slice(0,16);
+    e.target.value = v.replace(/(.{4})/g,'$1 ').trim();
+  });
+  var exp = document.getElementById('coExp');
+  if (exp) exp.addEventListener('input', function(e){
+    var v = e.target.value.replace(/\D/g,'').slice(0,4);
+    e.target.value = v.length > 2 ? v.slice(0,2) + ' / ' + v.slice(2) : v;
+  });
+  ['coCvc','coZip'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', function(e){ e.target.value = e.target.value.replace(/\D/g,''); });
+  });
+})();
 
 // Smooth scroll for nav
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
