@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services &amp; Reports | PCS Tax Service: FOR BUSINESS</title>
+<meta name="description" content="Full-service accounting and the financial reports we deliver — bookkeeping, payroll, tax filings, financial statements, and CFO-level reporting for business owners.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Source+Sans+3:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#0a0e1a;--marble-1:#14182a;--marble-2:#1c2238;--marble-3:#222a44;--vein:rgba(212,175,100,.06);
+--border:#2a3045;--border-soft:#1f2536;--gold-line:#b5904a;--gold:#d4b066;--gold-light:#e7cf91;
+--gold-soft:rgba(212,176,102,.14);--gold-glow:rgba(212,176,102,.32);
+--blue:#2f74d6;--blue-light:#5a97ea;--blue-glow:rgba(47,116,214,.45);--blue-bg:rgba(47,116,214,.10);
+--text:#f0ead6;--text-dim:#a99f86;--text-faint:#6b6450;
+--radius:16px;--radius-sm:11px;--shadow:0 14px 36px -16px rgba(0,0,0,.72);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Source Sans 3',sans-serif;color:var(--text);background:#090d18;overflow-x:hidden;position:relative}
+body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;
+background:radial-gradient(120% 95% at 22% 6%,rgba(60,70,104,.45),transparent 55%),radial-gradient(95% 80% at 88% 24%,rgba(212,176,102,.12),transparent 52%),radial-gradient(90% 90% at 72% 102%,rgba(47,116,214,.08),transparent 55%),linear-gradient(160deg,#171c30 0%,#0c1020 46%,#080c16 70%,#12172a 100%);}
+body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;mix-blend-mode:screen;
+background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='760' height='760'><filter id='v' x='0' y='0' width='100%25' height='100%25'><feTurbulence type='fractalNoise' baseFrequency='0.009 0.024' numOctaves='5' seed='14' stitchTiles='stitch' result='n'/><feColorMatrix in='n' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.15 -0.46' result='m'/><feFlood flood-color='%23d4b066' result='g'/><feComposite in='g' in2='m' operator='in'/></filter><rect width='100%25' height='100%25' filter='url(%23v)'/></svg>");background-size:760px 760px;}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:500}
+
+nav{position:sticky;top:0;z-index:1000;background:rgba(10,14,26,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-soft)}
+.nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 40px}
+.logo-text{font-family:'Playfair Display',serif;font-size:17px;color:var(--text);font-weight:700}
+.logo-text span{color:var(--gold)}
+.logo-sub{font-size:9px;color:var(--text-faint);letter-spacing:2px;text-transform:uppercase;margin-top:-2px}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{color:var(--text-dim);font-size:14px;font-weight:600;transition:color .3s}
+.nav-links a:hover{color:var(--blue-light)}
+.nav-cta{background:var(--blue);color:#fff;padding:10px 24px;border-radius:8px;font-weight:700;box-shadow:0 6px 22px -10px var(--blue-glow)}
+.nav-cta:hover{background:var(--blue-light)}
+
+section{padding:72px 40px;position:relative}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--gold);margin-bottom:14px}
+.section-title{font-size:clamp(32px,4vw,48px);line-height:1.12;color:var(--text);font-weight:500;margin-bottom:18px}
+.section-sub{font-size:18px;color:var(--text-dim);line-height:1.65;max-width:680px;font-weight:300}
+.divider-line{height:1px;background:linear-gradient(to right,transparent,var(--gold-line),transparent);opacity:.45;max-width:1200px;margin:0 auto}
+
+.page-hero{padding-top:92px;text-align:center}
+.page-hero .section-sub{margin:0 auto}
+.btn-gold{display:inline-block;background:var(--blue);color:#fff;padding:16px 38px;font-size:16px;font-weight:700;border-radius:10px;transition:all .3s;box-shadow:0 10px 30px -12px var(--blue-glow);border:none;cursor:pointer}
+.btn-gold:hover{transform:translateY(-2px);background:var(--blue-light)}
+.btn-outline-w{display:inline-block;border:1px solid var(--gold-line);color:var(--gold);padding:16px 38px;font-size:16px;font-weight:600;border-radius:10px;transition:all .3s}
+.btn-outline-w:hover{background:var(--gold-soft);border-color:var(--gold)}
+.cta-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+
+.service-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.service-card{background:var(--marble-2);border:1px solid var(--border);border-radius:var(--radius);padding:32px 26px;transition:all .35s}
+.service-card:hover{border-color:var(--gold-line);transform:translateY(-4px);box-shadow:var(--shadow)}
+.service-card .card-num{font-family:'Playfair Display',serif;font-size:40px;color:var(--gold);opacity:.55;margin-bottom:10px}
+.service-card h3{font-size:21px;color:var(--text);font-weight:500;margin-bottom:10px}
+.service-card p{font-size:14.5px;color:var(--text-dim);line-height:1.65}
+
+.reports-showcase{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
+.report-card{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);transition:transform .3s,border-color .3s}
+.report-card:hover{transform:translateY(-5px);border-color:var(--gold-line)}
+.report-card img{width:100%}
+.report-card .report-label{padding:16px 20px;background:var(--marble-2);color:var(--text);font-size:15px;font-weight:600;border-top:1px solid var(--gold-line)}
+
+.showpiece{position:relative;overflow:hidden}
+.sp-frame{margin-top:8px;background:var(--marble-2);border:1px solid var(--gold-line);border-radius:var(--radius);box-shadow:var(--shadow);padding:34px;position:relative}
+.sp-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:22px;margin-bottom:26px}
+.sp-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--text);font-weight:500}
+.sp-title span{color:var(--gold)}
+.sp-eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--text-faint);margin-top:6px}
+.sp-tag{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-line);background:var(--gold-soft);border-radius:20px;padding:6px 13px;white-space:nowrap}
+.sp-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.sp-kpi{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px}
+.sp-kpi .k-lab{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px}
+.sp-kpi .k-val{font-family:'Playfair Display',serif;font-size:27px;color:var(--text);font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.sp-kpi .k-delta{font-size:12px;font-weight:600;margin-top:7px}
+.sp-kpi .k-delta.up{color:#5fd08a}
+.sp-body{display:grid;grid-template-columns:1.65fr 1fr;gap:20px}
+.sp-chart,.sp-panel{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:22px}
+.sp-chart h5,.sp-panel h5{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:700}
+.sp-chart svg{width:100%;height:auto;display:block}
+.sp-months{display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:var(--text-faint)}
+.sp-side{display:flex;flex-direction:column;gap:20px}
+.sp-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border-soft);font-size:14px}
+.sp-row:last-child{border-bottom:none}
+.sp-row .r-lab{color:var(--text-dim)}
+.sp-row .r-val{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums}
+.sp-row.tot .r-lab,.sp-row.tot .r-val{color:var(--gold);font-weight:700}
+.sp-recs{list-style:none}
+.sp-recs li{font-size:13.5px;color:var(--text-dim);padding:9px 0;display:flex;gap:10px;line-height:1.5;border-bottom:1px solid var(--border-soft)}
+.sp-recs li:last-child{border-bottom:none}
+.sp-recs li::before{content:'\25C6';color:var(--gold);font-size:10px;margin-top:4px}
+.sp-recs li b{color:var(--text);font-weight:600}
+
+.cta-section{background:linear-gradient(135deg,#0f1d3a,#16294d);text-align:center;border-top:1px solid var(--gold-line);border-bottom:1px solid var(--gold-line);position:relative;overflow:hidden}
+.cta-section::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:720px;height:720px;background:radial-gradient(circle,var(--blue-glow),transparent 60%);opacity:.5;pointer-events:none}
+.cta-section h2{font-size:clamp(30px,4vw,46px);color:var(--text);font-weight:500;margin-bottom:16px;position:relative}
+.cta-section p{font-size:18px;color:var(--text-dim);max-width:560px;margin:0 auto 8px;font-weight:300;position:relative}
+.cta-phone{margin-top:18px;font-size:24px;font-weight:700;letter-spacing:1px;color:var(--gold);position:relative}
+
+footer{background:rgba(7,10,20,.6);color:var(--text-dim);padding:42px 40px;border-top:1px solid var(--border);text-align:center;font-size:14px}
+footer a{color:var(--gold);font-weight:600}
+
+@media(max-width:1024px){.service-cards,.reports-showcase{grid-template-columns:1fr 1fr}.sp-kpis{grid-template-columns:1fr 1fr}.sp-body{grid-template-columns:1fr}}
+@media(max-width:768px){.nav-links{gap:16px}.nav-links a:not(.nav-cta){display:none}section{padding:56px 20px}.nav-inner{padding:12px 20px}.service-cards,.reports-showcase{grid-template-columns:1fr}.sp-kpis{grid-template-columns:1fr 1fr}.sp-frame{padding:24px 20px}}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="nav-inner">
+<a href="index.html"><div class="logo-text">PCS Tax Service: <span>FOR BUSINESS</span></div><div class="logo-sub">PCS Tax Service &amp; Academy</div></a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="index.html#pricing">Pricing</a>
+<a href="pay.html">Pay Bill</a>
+<a href="index.html#signup" class="nav-cta">Get Started</a>
+</div>
+</div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+<div class="section-inner">
+<div class="section-label">What You Get</div>
+<h1 class="section-title">Full-Service Accounting &amp; the Reports to Prove It</h1>
+<div class="section-sub">Everything we handle for your business — and the financial reports we deliver every month. Reports most owners have never seen before.</div>
+<div class="cta-row">
+<a href="index.html#signup" class="btn-gold">Get My Free Financial Review</a>
+<a href="index.html#pricing" class="btn-outline-w">View Pricing</a>
+</div>
+</div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- SERVICES -->
+<section id="services">
+<div class="section-inner">
+<div class="section-label">What We Do</div>
+<h2 class="section-title">Built for Business Owners</h2>
+<div class="service-cards">
+<div class="service-card"><div class="card-num">01</div><h3>Monthly Bookkeeping</h3><p>Every transaction categorized, reconciled, and organized. Your books stay clean month after month without you lifting a finger.</p></div>
+<div class="service-card"><div class="card-num">02</div><h3>Payroll Processing</h3><p>Your people get paid on time, every time. We handle calculations, filings, and compliance so your team never has to worry.</p></div>
+<div class="service-card"><div class="card-num">03</div><h3>Quarterly Tax Filings</h3><p>No more missed deadlines or penalties. We prepare and file your quarterly returns and keep you compliant year-round.</p></div>
+<div class="service-card"><div class="card-num">04</div><h3>Financial Statements</h3><p>Profit &amp; Loss, Balance Sheet, Cash Flow — delivered monthly with clarity you can actually use to make smarter decisions.</p></div>
+<div class="service-card"><div class="card-num">05</div><h3>Annual Tax Preparation</h3><p>Backed by 22 years of tax expertise at PCS Tax Service &amp; Academy. We maximize deductions and minimize your liability.</p></div>
+<div class="service-card"><div class="card-num">06</div><h3>CFO-Level Insights</h3><p>Strategic recommendations from your real numbers — budget analysis, variance tracking, and guidance delivered every month.</p></div>
+</div>
+</div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- REPORTS GALLERY -->
+<section id="gallery">
+<div class="section-inner">
+<div class="section-label">Our Reports &amp; More</div>
+<h2 class="section-title">Reports Your Business Has Never Seen Before</h2>
+<div class="section-sub">A complete picture of where your business stands and where it's heading — professional-grade, every month.</div>
+<div class="reports-showcase">
+<div class="report-card"><img src="financial_statement.webp" alt="Balance Sheet"><div class="report-label">Balance Sheet</div></div>
+<div class="report-card"><img src="financial_statements_for_site.webp" alt="Profit and Loss Statement"><div class="report-label">Profit &amp; Loss Statement</div></div>
+<div class="report-card"><img src="financial_statements_site_2.webp" alt="Cash Flow Analysis"><div class="report-label">Cash Flow Analysis</div></div>
+<div class="report-card"><img src="financial_statements_4.webp" alt="Budget vs Actual"><div class="report-label">Budget vs Actual Analysis</div></div>
+<div class="report-card"><img src="financial_pics.webp" alt="Executive Dashboard"><div class="report-label">Executive Financial Dashboard</div></div>
+<div class="report-card"><img src="cfo_recommends_stite_5.webp" alt="CFO Recommendations"><div class="report-label">CFO Recommendations</div></div>
+</div>
+</div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- SHOWPIECE -->
+<section class="showpiece">
+<div class="section-inner">
+<div class="section-label">The PCS Difference</div>
+<h2 class="section-title">One Report. Your Whole Business at a Glance.</h2>
+<div class="sp-frame">
+<div class="sp-top">
+<div><div class="sp-title">Monthly Financial <span>Briefing</span></div><div class="sp-eyebrow">Prepared by PCS Tax Service: FOR BUSINESS</div></div>
+<div class="sp-tag">Sample &middot; For Illustration</div>
+</div>
+<div class="sp-kpis">
+<div class="sp-kpi"><div class="k-lab">Annual Revenue</div><div class="k-val">$14.82M</div><div class="k-delta up">&#9650; 11.2% YoY</div></div>
+<div class="sp-kpi"><div class="k-lab">YTD Net Income</div><div class="k-val">$2.46M</div><div class="k-delta up">&#9650; 18.4%</div></div>
+<div class="sp-kpi"><div class="k-lab">Net Profit Margin</div><div class="k-val">16.6%</div><div class="k-delta up">&#9650; 1.9 pts</div></div>
+<div class="sp-kpi"><div class="k-lab">Cash on Hand</div><div class="k-val">$2.64M</div><div class="k-delta up">&#9650; $177K</div></div>
+</div>
+<div class="sp-body">
+<div class="sp-chart">
+<h5>Revenue &mdash; Trailing 12 Months</h5>
+<svg viewBox="0 0 640 240" role="img" aria-label="Trailing twelve month revenue trending upward">
+<defs><linearGradient id="spArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d4b066" stop-opacity=".5"/><stop offset="1" stop-color="#d4b066" stop-opacity="0"/></linearGradient></defs>
+<line x1="20" y1="210" x2="620" y2="210" stroke="#2a3045" stroke-width="1"/>
+<path d="M20,188 L74,176 L128,182 L182,150 L236,160 L290,128 L344,134 L398,104 L452,114 L506,80 L560,90 L614,44 L614,210 L20,210 Z" fill="url(#spArea)"/>
+<path d="M20,188 L74,176 L128,182 L182,150 L236,160 L290,128 L344,134 L398,104 L452,114 L506,80 L560,90 L614,44" fill="none" stroke="#d4b066" stroke-width="2.5" stroke-linejoin="round"/>
+<circle cx="506" cy="80" r="6" fill="#2f74d6" stroke="#0a0e1a" stroke-width="2"/>
+</svg>
+<div class="sp-months"><span>Jan</span><span>Mar</span><span>May</span><span>Jul</span><span>Sep</span><span>Nov</span></div>
+</div>
+<div class="sp-side">
+<div class="sp-panel">
+<h5>Profit &amp; Loss</h5>
+<div class="sp-row"><span class="r-lab">Revenue</span><span class="r-val">$14,820,000</span></div>
+<div class="sp-row"><span class="r-lab">Cost of Goods Sold</span><span class="r-val">$8,604,000</span></div>
+<div class="sp-row"><span class="r-lab">Gross Profit</span><span class="r-val">$6,216,000</span></div>
+<div class="sp-row"><span class="r-lab">Operating Expenses</span><span class="r-val">$3,756,000</span></div>
+<div class="sp-row tot"><span class="r-lab">Net Income</span><span class="r-val">$2,460,000</span></div>
+</div>
+<div class="sp-panel">
+<h5>CFO Recommendations &mdash; $550K Projected Impact</h5>
+<ul class="sp-recs">
+<li>Accelerate A/R collections &mdash; <b>free up $310K</b></li>
+<li>Refinance long-term debt &mdash; <b>save $48K/yr</b></li>
+<li>Shift inventory mix &mdash; <b>+$120K margin</b></li>
+<li>Capture Q3 tax credits &mdash; <b>save $72K</b></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+<h2>Ready to See Your Numbers Like This?</h2>
+<p>Book a free financial review and we'll show you exactly what we'd build from your books.</p>
+<div class="cta-row">
+<a href="index.html#signup" class="btn-gold">Get My Free Financial Review</a>
+<a href="index.html#pricing" class="btn-outline-w">View Pricing</a>
+</div>
+<div class="cta-phone">(214) 943-1099</div>
+</section>
+
+<footer>
+&copy; 2026 PCS Tax Service &amp; Academy &middot; Dallas, Texas &middot; <a href="index.html">accounting.pcstaxservice.com</a> &middot; <a href="pay.html">Pay My Bill</a>
+</footer>
+
+</body>
+</html>
