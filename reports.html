@@ -64,6 +64,16 @@ section{padding:72px 40px;position:relative}
 .report-card:hover{transform:translateY(-5px);border-color:var(--gold-line)}
 .report-card img{width:100%}
 .report-card .report-label{padding:16px 20px;background:var(--marble-2);color:var(--text);font-size:15px;font-weight:600;border-top:1px solid var(--gold-line)}
+.svc{text-align:center}
+.svc-eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--gold)}
+.svc-card{margin:26px auto 0;max-width:560px}
+.svc-card.wide{max-width:940px}
+.svc-card img{width:100%;height:auto;display:block;border-radius:var(--radius);border:1px solid var(--gold-line);box-shadow:var(--shadow)}
+.svc-cta{margin-top:26px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.svc-cta .btn-gold{min-height:48px;display:inline-flex;align-items:center;justify-content:center}
+.svc-cta .risk{font-size:13px;color:var(--text-faint)}
+.svc-cta .risk a{color:var(--gold);font-weight:600}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 .showpiece{position:relative;overflow:hidden}
 .sp-frame{margin-top:8px;background:var(--marble-2);border:1px solid var(--gold-line);border-radius:var(--radius);box-shadow:var(--shadow);padding:34px;position:relative}
@@ -155,6 +165,78 @@ footer a{color:var(--gold);font-weight:600}
 
 <div class="divider-line"></div>
 
+<!-- COMPLIANCE / GOVERNMENT FILINGS -->
+<section class="svc" id="compliance">
+<div class="section-inner">
+<div class="svc-eyebrow">Compliance &amp; Government Filings</div>
+<h2 class="sr-only">Government Filings, Handled</h2>
+<p class="sr-only">We deal with the agencies so you don't have to.</p>
+<ul class="sr-only">
+<li>Texas Workforce Commission filings &amp; payments</li>
+<li>Payroll processing &amp; tax deposits</li>
+<li>State Comptroller — Sales &amp; Use Tax</li>
+<li>State Comptroller — Franchise Tax</li>
+<li>State &amp; Federal Tax Returns</li>
+<li>Multi-State Compliance — any state</li>
+</ul>
+<figure class="svc-card">
+<img src="compliance_services.webp" alt="Government Filings, Handled. We deal with the agencies so you don't have to: Texas Workforce Commission filings and payments, payroll processing and tax deposits, State Comptroller Sales & Use Tax, State Comptroller Franchise Tax, State and Federal tax returns, and multi-state compliance in any state." loading="lazy">
+</figure>
+<div class="svc-cta">
+<a href="index.html#signup" class="btn-gold">Free Consultation</a>
+<div class="risk">No obligation. Free consultation. &nbsp;&middot;&nbsp; <a href="tel:+12149431099">(214) 943-1099</a></div>
+</div>
+</div>
+</section>
+
+<!-- LEGAL & ENTITY SERVICES -->
+<section class="svc" id="legal">
+<div class="section-inner">
+<div class="svc-eyebrow">Legal &amp; Entity Services</div>
+<h2 class="sr-only">Legal &amp; Entity Services</h2>
+<p class="sr-only">Backed by in-house counsel.</p>
+<ul class="sr-only">
+<li>Trusts — Revocable, Irrevocable, Land &amp; Asset Protection</li>
+<li>S-Corp &amp; C-Corp Elections</li>
+<li>LLC &amp; Entity Formation</li>
+<li>Entity Migrations &amp; Conversions</li>
+<li>NDA &amp; Contract Review</li>
+<li>Capital Contributions &amp; Distribution Analysis</li>
+</ul>
+<figure class="svc-card wide">
+<img src="legal_entity_services_wide.webp" alt="Legal & Entity Services, backed by in-house counsel: trusts (revocable, irrevocable, land and asset protection), S-Corp and C-Corp elections, LLC and entity formation, entity migrations and conversions, NDA and contract review, and capital contribution and distribution analysis." loading="lazy">
+</figure>
+<div class="svc-cta">
+<a href="index.html#signup" class="btn-gold">Talk to Our Counsel</a>
+<div class="risk">No obligation. Free consultation. &nbsp;&middot;&nbsp; <a href="tel:+12149431099">(214) 943-1099</a></div>
+</div>
+</div>
+</section>
+
+<!-- STRATEGIES FOR YOUR INVESTMENTS (traders) -->
+<section class="svc" id="traders">
+<div class="section-inner">
+<div class="svc-eyebrow">Strategies For Your Investments</div>
+<h2 class="sr-only">Strategies For Your Investments</h2>
+<p class="sr-only">For traders &amp; active investors.</p>
+<ul class="sr-only">
+<li>Trader Tax Status &amp; Mark-to-Market Elections</li>
+<li>Wash Sale Tracking &amp; Schedule D</li>
+<li>Capital Gains Planning</li>
+<li>K-1 &amp; Pass-Through Reporting</li>
+</ul>
+<figure class="svc-card wide">
+<img src="investment_strategies_wide.webp" alt="Strategies For Your Investments, for traders and active investors: trader tax status and mark-to-market elections, wash sale tracking and Schedule D, capital gains planning, and K-1 and pass-through reporting." loading="lazy">
+</figure>
+<div class="svc-cta">
+<a href="index.html#signup" class="btn-gold">Free Consultation</a>
+<div class="risk">No obligation. Free consultation. &nbsp;&middot;&nbsp; <a href="tel:+12149431099">(214) 943-1099</a></div>
+</div>
+</div>
+</section>
+
+<div class="divider-line"></div>
+
 <!-- REPORTS GALLERY -->
 <section id="gallery">
 <div class="section-inner">
@@ -167,7 +249,13 @@ footer a{color:var(--gold);font-weight:600}
 <div class="report-card"><img src="financial_statements_site_2.webp" alt="Cash Flow Analysis"><div class="report-label">Cash Flow Analysis</div></div>
 <div class="report-card"><img src="financial_statements_4.webp" alt="Budget vs Actual"><div class="report-label">Budget vs Actual Analysis</div></div>
 <div class="report-card"><img src="financial_pics.webp" alt="Executive Dashboard"><div class="report-label">Executive Financial Dashboard</div></div>
-<div class="report-card"><img src="cfo_recommends_stite_5.webp" alt="CFO Recommendations"><div class="report-label">CFO Recommendations</div></div>
+<div class="report-card"><img src="cfo_recommends_stite_5.webp" alt="CFO Recommendations" loading="lazy"><div class="report-label">CFO Recommendations</div></div>
+<div class="report-card"><img src="report_period_over_period.webp" alt="Period-over-Period comparison" loading="lazy"><div class="report-label">Period-over-Period</div></div>
+<div class="report-card"><img src="report_cash_flow_forecast.webp" alt="13-Week Cash Flow Forecast" loading="lazy"><div class="report-label">13-Week Cash Flow Forecast</div></div>
+<div class="report-card"><img src="report_break_even.webp" alt="Break-Even Analysis" loading="lazy"><div class="report-label">Break-Even Analysis</div></div>
+<div class="report-card"><img src="report_ebitda.webp" alt="EBITDA Statement" loading="lazy"><div class="report-label">EBITDA Statement</div></div>
+<div class="report-card"><img src="report_owner_sde.webp" alt="Owner's Discretionary Earnings (SDE)" loading="lazy"><div class="report-label">Owner's Discretionary Earnings (SDE)</div></div>
+<div class="report-card"><img src="report_revenue_concentration.webp" alt="Revenue Concentration" loading="lazy"><div class="report-label">Revenue Concentration</div></div>
 </div>
 </div>
 </section>
