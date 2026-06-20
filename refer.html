@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Refer a Business | PCS Tax Service: FOR BUSINESS</title>
+<meta name="description" content="Refer a business to PCS Tax Service and get credit. Generate your personal referral link and QR code.">
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700&family=Source+Sans+3:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#0a0e1a;--marble-1:#14182a;--marble-2:#1c2238;--vein:rgba(212,175,100,.06);
+--border:#2a3045;--border-soft:#1f2536;--gold-line:#b5904a;--gold:#d4b066;--gold-light:#e7cf91;
+--gold-soft:rgba(212,176,102,.14);--gold-glow:rgba(212,176,102,.32);
+--blue:#2f74d6;--blue-light:#5a97ea;--blue-glow:rgba(47,116,214,.45);--blue-bg:rgba(47,116,214,.10);
+--text:#f0ead6;--text-dim:#a99f86;--text-faint:#6b6450;
+--radius:16px;--radius-sm:11px;--shadow:0 14px 36px -16px rgba(0,0,0,.72);
+}
+body{font-family:'Source Sans 3',sans-serif;color:var(--text);background:#090d18;min-height:100vh;display:flex;flex-direction:column;position:relative}
+body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(120% 95% at 22% 6%,rgba(60,70,104,.45),transparent 55%),radial-gradient(95% 80% at 88% 24%,rgba(212,176,102,.12),transparent 52%),radial-gradient(90% 90% at 72% 102%,rgba(47,116,214,.08),transparent 55%),linear-gradient(160deg,#171c30 0%,#0c1020 46%,#080c16 70%,#12172a 100%);}
+body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;mix-blend-mode:screen;background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='760' height='760'><filter id='v' x='0' y='0' width='100%25' height='100%25'><feTurbulence type='fractalNoise' baseFrequency='0.009 0.024' numOctaves='5' seed='14' stitchTiles='stitch' result='n'/><feColorMatrix in='n' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.15 -0.46' result='m'/><feFlood flood-color='%23d4b066' result='g'/><feComposite in='g' in2='m' operator='in'/></filter><rect width='100%25' height='100%25' filter='url(%23v)'/></svg>");background-size:760px 760px;}
+a{text-decoration:none;color:inherit}
+h1,h2{font-family:'Playfair Display',serif;font-weight:500}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid var(--border-soft)}
+.logo-text{font-family:'Playfair Display',serif;font-size:17px;color:var(--text);font-weight:700}
+.logo-text span{color:var(--gold)}
+.logo-sub{font-size:9px;color:var(--text-faint);letter-spacing:2px;text-transform:uppercase;margin-top:-2px}
+.back{font-size:14px;color:var(--text-dim);font-weight:600}
+.back:hover{color:var(--blue-light)}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:48px 20px}
+.wrap{width:100%;max-width:760px}
+.head{text-align:center;margin-bottom:30px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.head h1{font-size:clamp(28px,5vw,40px);color:var(--text);margin-bottom:12px}
+.head p{font-size:16px;color:var(--text-dim);line-height:1.6;max-width:480px;margin:0 auto}
+.card{background:var(--marble-2);border:1px solid var(--gold-line);border-radius:var(--radius);padding:34px;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 280px;gap:30px;align-items:start}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px}
+.field input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:13px 14px;color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:15px;outline:none;transition:border-color .3s,box-shadow .3s}
+.field input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-bg)}
+.field .hint{font-size:12px;color:var(--text-faint);margin-top:6px}
+.linkbox{display:flex;gap:8px;margin-top:4px}
+.linkbox input{flex:1;font-size:13px;color:var(--gold)}
+.copy-btn{flex-shrink:0;background:var(--gold-soft);border:1px solid var(--gold-line);color:var(--gold);border-radius:9px;padding:0 16px;font-weight:700;font-size:13px;cursor:pointer;transition:all .3s}
+.copy-btn:hover{background:var(--gold);color:#1a1408}
+.qr-col{text-align:center}
+.qr-panel{background:#ffffff;border-radius:var(--radius-sm);padding:18px;display:inline-block;box-shadow:0 8px 24px -12px rgba(0,0,0,.6)}
+.qr-panel img,.qr-panel canvas{display:block;width:220px!important;height:220px!important}
+.dl-btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;width:100%;margin-top:16px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .3s;box-shadow:0 10px 30px -12px var(--blue-glow)}
+.dl-btn:hover{background:var(--blue-light);transform:translateY(-2px)}
+.how{margin-top:26px;background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:var(--radius-sm);padding:18px 22px;font-size:14px;color:var(--text-dim);line-height:1.6}
+.how b{color:var(--text)}
+footer{text-align:center;padding:26px 20px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-faint)}
+@media(max-width:680px){.card{grid-template-columns:1fr}.qr-col{order:-1}}
+</style>
+</head>
+<body>
+<header>
+<div><div class="logo-text">PCS Tax Service: <span>FOR BUSINESS</span></div><div class="logo-sub">PCS Tax Service &amp; Academy</div></div>
+<a class="back" href="index.html">&larr; Back to site</a>
+</header>
+
+<main>
+<div class="wrap">
+<div class="head">
+<div class="eyebrow">Referral Program</div>
+<h1>Refer a Business, Get Credit</h1>
+<p>Enter your name to get your personal link and QR code. Anyone who scans it and books a consult is tagged to you.</p>
+</div>
+
+<div class="card">
+<div>
+<div class="field">
+<label for="refName">Your Name</label>
+<input type="text" id="refName" placeholder="e.g. John Smith" autocomplete="off">
+<div class="hint">This is the credit that shows up on the lead.</div>
+</div>
+<div class="field">
+<label for="baseUrl">Site Link <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--text-faint)">(change to reuse for any business)</span></label>
+<input type="text" id="baseUrl" value="https://accounting.pcstaxservice.com/">
+</div>
+<div class="field">
+<label>Your Referral Link</label>
+<div class="linkbox">
+<input type="text" id="refLink" readonly>
+<button class="copy-btn" id="copyBtn" type="button">Copy</button>
+</div>
+</div>
+</div>
+<div class="qr-col">
+<div class="qr-panel"><div id="qrbox"></div></div>
+<button class="dl-btn" id="dlBtn" type="button">Download QR</button>
+</div>
+</div>
+
+<div class="how">
+<b>How it works:</b> Print the QR or text the link to a business owner. When they scan/click it and request a free consultation, your name auto-fills the "Referred By" field &mdash; so you get the credit. No app, no sign-up.
+</div>
+</div>
+</main>
+
+<footer>&copy; 2026 PCS Tax Service &amp; Academy &middot; Dallas, Texas &middot; <a href="index.html" style="color:var(--gold);font-weight:600">accounting.pcstaxservice.com</a></footer>
+
+<script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+<script>
+(function(){
+  var nameEl=document.getElementById('refName'), baseEl=document.getElementById('baseUrl'),
+      linkEl=document.getElementById('refLink'), box=document.getElementById('qrbox');
+  var qr=null, lastSlug='';
+  function build(){
+    var name=(nameEl.value||'').trim();
+    var base=(baseEl.value||'').trim() || 'https://accounting.pcstaxservice.com/';
+    if(base.indexOf('?')===-1 && base.slice(-1)!=='/') base+='/';
+    var link = name ? base + (base.indexOf('?')>-1?'&':'?') + 'ref=' + encodeURIComponent(name) : base;
+    linkEl.value=link;
+    box.innerHTML='';
+    if(typeof QRCode!=='undefined'){
+      qr=new QRCode(box,{text:link,width:220,height:220,colorDark:'#0a0e1a',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+    }
+    lastSlug = name ? name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') : 'pcs';
+  }
+  function download(){
+    var cv=box.querySelector('canvas'); var data;
+    if(cv){ data=cv.toDataURL('image/png'); }
+    else { var img=box.querySelector('img'); if(!img) return; data=img.src; }
+    var a=document.createElement('a');
+    a.href=data; a.download='PCS-referral-'+(lastSlug||'qr')+'.png';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  }
+  nameEl.addEventListener('input',build);
+  baseEl.addEventListener('input',build);
+  document.getElementById('copyBtn').addEventListener('click',function(){
+    linkEl.select(); try{document.execCommand('copy');}catch(e){}
+    var b=document.getElementById('copyBtn'); var t=b.textContent; b.textContent='Copied'; setTimeout(function(){b.textContent=t;},1500);
+  });
+  document.getElementById('dlBtn').addEventListener('click',download);
+  build();
+})();
+</script>
+</body>
+</html>
