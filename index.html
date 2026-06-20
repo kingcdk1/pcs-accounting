@@ -368,10 +368,12 @@ section + section::before{content:'';position:absolute;top:0;left:50%;transform:
 .svc-card{margin:26px auto 0;max-width:560px}
 .svc-card.wide{max-width:940px}
 .svc-card img{width:100%;height:auto;display:block;border-radius:var(--radius);border:1px solid var(--gold-line);box-shadow:var(--shadow)}
-.svc-cta{margin-top:26px;display:flex;flex-direction:column;align-items:center;gap:10px}
-.svc-cta .btn-gold{min-height:48px;display:inline-flex;align-items:center;justify-content:center}
+.svc-cta{margin-top:26px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.svc-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.svc-cta .btn-gold,.svc-cta .btn-outline-w{min-height:48px;display:inline-flex;align-items:center;justify-content:center}
 .svc-cta .risk{font-size:13px;color:var(--text-faint);letter-spacing:.2px}
 .svc-cta .risk a{color:var(--gold);font-weight:600}
+@media(max-width:480px){.svc-btns{flex-direction:column;width:100%;max-width:320px}.svc-btns .btn-gold,.svc-btns .btn-outline-w{width:100%}}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* ===== GUARANTEES ===== */
@@ -444,6 +446,7 @@ section{padding:60px 20px}
 </div>
 <div class="nav-links">
 <a href="reports.html">Services</a>
+<a href="investments.html">Investments</a>
 <a href="reports.html#gallery">Reports</a>
 <a href="#pricing">Pricing</a>
 <a href="pay.html">Pay Bill</a>
@@ -617,8 +620,11 @@ section{padding:60px 20px}
 </div>
 </div>
 <div class="svc-cta" style="margin-top:46px">
-<a href="#signup" class="btn-gold">Free Consultation</a>
-<div class="risk">No obligation. Free consultation. &nbsp;&middot;&nbsp; <a href="tel:+12149431099">(214) 943-1099</a></div>
+<div class="svc-btns">
+<a href="#pricing" class="btn-gold">I Know What I Want — Get Started</a>
+<a href="#signup" class="btn-outline-w">Free Consultation</a>
+</div>
+<div class="risk">No obligation. &nbsp;&middot;&nbsp; <a href="tel:+12149431099">(214) 943-1099</a></div>
 </div>
 </div>
 </section>

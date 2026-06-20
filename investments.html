@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategies For Your Investments | PCS Tax Service: FOR BUSINESS</title>
+<meta name="description" content="Tax strategy for traders and active investors: trader tax status, mark-to-market elections, wash sale tracking, Schedule D, capital gains planning, and K-1 / pass-through reporting.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Source+Sans+3:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#0a0e1a;--marble-1:#14182a;--marble-2:#1c2238;--marble-3:#222a44;--vein:rgba(212,175,100,.06);
+--border:#2a3045;--border-soft:#1f2536;--gold-line:#b5904a;--gold:#d4b066;--gold-light:#e7cf91;
+--gold-soft:rgba(212,176,102,.14);--gold-glow:rgba(212,176,102,.32);
+--blue:#2f74d6;--blue-light:#5a97ea;--blue-glow:rgba(47,116,214,.45);--blue-bg:rgba(47,116,214,.10);
+--text:#f0ead6;--text-dim:#a99f86;--text-faint:#6b6450;
+--radius:16px;--radius-sm:11px;--shadow:0 14px 36px -16px rgba(0,0,0,.72);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Source Sans 3',sans-serif;color:var(--text);background:#090d18;overflow-x:hidden;position:relative}
+body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;
+background:radial-gradient(120% 95% at 22% 6%,rgba(60,70,104,.45),transparent 55%),radial-gradient(95% 80% at 88% 24%,rgba(212,176,102,.12),transparent 52%),radial-gradient(90% 90% at 72% 102%,rgba(47,116,214,.08),transparent 55%),linear-gradient(160deg,#171c30 0%,#0c1020 46%,#080c16 70%,#12172a 100%);}
+body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;mix-blend-mode:screen;
+background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='760' height='760'><filter id='v' x='0' y='0' width='100%25' height='100%25'><feTurbulence type='fractalNoise' baseFrequency='0.009 0.024' numOctaves='5' seed='14' stitchTiles='stitch' result='n'/><feColorMatrix in='n' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.15 -0.46' result='m'/><feFlood flood-color='%23d4b066' result='g'/><feComposite in='g' in2='m' operator='in'/></filter><rect width='100%25' height='100%25' filter='url(%23v)'/></svg>");background-size:760px 760px;}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:500}
+
+nav{position:sticky;top:0;z-index:1000;background:rgba(10,14,26,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-soft)}
+.nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 40px}
+.logo-text{font-family:'Playfair Display',serif;font-size:17px;color:var(--text);font-weight:700}
+.logo-text span{color:var(--gold)}
+.logo-sub{font-size:9px;color:var(--text-faint);letter-spacing:2px;text-transform:uppercase;margin-top:-2px}
+.nav-links{display:flex;gap:26px;align-items:center}
+.nav-links a{color:var(--text-dim);font-size:14px;font-weight:600;transition:color .3s}
+.nav-links a:hover,.nav-links a.active{color:var(--blue-light)}
+.nav-cta{background:var(--blue);color:#fff;padding:10px 24px;border-radius:8px;font-weight:700;box-shadow:0 6px 22px -10px var(--blue-glow)}
+.nav-cta:hover{background:var(--blue-light)}
+
+section{padding:72px 40px;position:relative}
+.section-inner{max-width:1120px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--gold);margin-bottom:14px}
+.section-title{font-size:clamp(32px,4.4vw,50px);line-height:1.12;color:var(--text);font-weight:500;margin-bottom:18px}
+.section-sub{font-size:18px;color:var(--text-dim);line-height:1.65;max-width:640px;font-weight:300}
+.divider-line{height:1px;background:linear-gradient(to right,transparent,var(--gold-line),transparent);opacity:.45;max-width:1120px;margin:0 auto}
+
+.btn-gold{display:inline-flex;align-items:center;justify-content:center;min-height:48px;background:var(--blue);color:#fff;padding:15px 34px;font-size:16px;font-weight:700;border-radius:10px;transition:all .3s;box-shadow:0 10px 30px -12px var(--blue-glow);border:none;cursor:pointer}
+.btn-gold:hover{transform:translateY(-2px);background:var(--blue-light)}
+.btn-outline-w{display:inline-flex;align-items:center;justify-content:center;min-height:48px;border:1px solid var(--gold-line);color:var(--gold);padding:15px 34px;font-size:16px;font-weight:600;border-radius:10px;transition:all .3s}
+.btn-outline-w:hover{background:var(--gold-soft);border-color:var(--gold)}
+.cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.risk{font-size:13px;color:var(--text-faint);margin-top:14px}
+.risk a{color:var(--gold);font-weight:600}
+
+.page-hero{padding-top:84px;text-align:center}
+.page-hero .section-sub{margin:0 auto}
+.hero-img{margin:34px auto 0;max-width:960px}
+.hero-img img{width:100%;height:auto;border-radius:var(--radius);border:1px solid var(--gold-line);box-shadow:var(--shadow)}
+
+.svc-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:48px}
+.svc-card{background:var(--marble-2);border:1px solid var(--border);border-radius:var(--radius);padding:30px 28px;transition:all .35s}
+.svc-card:hover{border-color:var(--gold-line);transform:translateY(-4px);box-shadow:var(--shadow)}
+.svc-card h3{font-size:20px;color:var(--text);font-weight:500;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.svc-card h3::before{content:'\25C6';color:var(--gold);font-size:12px}
+.svc-card p{font-size:15px;color:var(--text-dim);line-height:1.65}
+
+.cta-section{background:linear-gradient(135deg,#0f1d3a,#16294d);text-align:center;border-top:1px solid var(--gold-line);border-bottom:1px solid var(--gold-line);position:relative;overflow:hidden}
+.cta-section::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:720px;height:720px;background:radial-gradient(circle,var(--blue-glow),transparent 60%);opacity:.5;pointer-events:none}
+.cta-section h2{font-size:clamp(30px,4vw,46px);color:var(--text);font-weight:500;margin-bottom:14px;position:relative}
+.cta-section p{font-size:18px;color:var(--text-dim);max-width:560px;margin:0 auto;font-weight:300;position:relative}
+.cta-phone{margin-top:18px;font-size:24px;font-weight:700;letter-spacing:1px;color:var(--gold);position:relative}
+
+footer{background:rgba(7,10,20,.6);color:var(--text-dim);padding:42px 40px;border-top:1px solid var(--border);text-align:center;font-size:14px}
+footer a{color:var(--gold);font-weight:600}
+
+@media(max-width:1024px){.svc-cards{grid-template-columns:1fr}}
+@media(max-width:768px){.nav-links{gap:16px}.nav-links a:not(.nav-cta){display:none}section{padding:56px 20px}.nav-inner{padding:12px 20px}.cta-row{flex-direction:column;align-items:stretch}.cta-row .btn-gold,.cta-row .btn-outline-w{width:100%}}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="nav-inner">
+<a href="index.html"><div class="logo-text">PCS Tax Service: <span>FOR BUSINESS</span></div><div class="logo-sub">PCS Tax Service &amp; Academy</div></a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="reports.html">Services</a>
+<a href="investments.html" class="active">Investments</a>
+<a href="index.html#pricing">Pricing</a>
+<a href="pay.html">Pay Bill</a>
+<a href="index.html#signup" class="nav-cta">Get Started</a>
+</div>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+<div class="section-inner">
+<div class="section-label">For Traders &amp; Active Investors</div>
+<h1 class="section-title">Strategies For Your Investments</h1>
+<div class="section-sub">Active trading creates tax complexity most accountants never touch. We handle trader tax status, mark-to-market, wash sales, and the reporting that protects your gains.</div>
+<div class="cta-row">
+<a href="index.html#pricing" class="btn-gold">I Know What I Want — Get Started</a>
+<a href="index.html#signup" class="btn-outline-w">Free Consultation</a>
+</div>
+<div class="risk">No obligation. &nbsp;&middot;&nbsp; <a href="tel:+12149431099">(214) 943-1099</a></div>
+<figure class="hero-img">
+<img src="investment_strategies_wide.webp" alt="Strategies For Your Investments — for traders and active investors: trader tax status and mark-to-market elections, wash sale tracking and Schedule D, capital gains planning, and K-1 and pass-through reporting.">
+</figure>
+</div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- WHAT WE HANDLE -->
+<section>
+<div class="section-inner">
+<div class="section-label">What We Handle</div>
+<h2 class="section-title">Built for How Traders Actually Get Taxed</h2>
+<div class="svc-cards">
+<div class="svc-card"><h3>Trader Tax Status &amp; Mark-to-Market</h3><p>We assess whether you qualify for Trader Tax Status and handle the Section 475(f) mark-to-market election — turning capital losses into fully deductible ordinary losses and removing the wash-sale headache.</p></div>
+<div class="svc-card"><h3>Wash Sale Tracking &amp; Schedule D</h3><p>High-volume trading means hundreds or thousands of lots. We track wash sales across accounts and reconcile every transaction onto a clean, audit-ready Schedule D / Form 8949.</p></div>
+<div class="svc-card"><h3>Capital Gains Planning</h3><p>Short-term vs. long-term, harvesting, and timing — we plan around your positions so you keep more of what you make instead of finding out in April.</p></div>
+<div class="svc-card"><h3>K-1 &amp; Pass-Through Reporting</h3><p>Trading through an LLC, partnership, or fund? We prepare and reconcile K-1s and pass-through income so your entity and personal returns line up.</p></div>
+</div>
+</div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+<h2>Trade Hard. We'll Handle the Tax Side.</h2>
+<p>Know what you need, or want us to walk you through it? Either way, start here.</p>
+<div class="cta-row">
+<a href="index.html#pricing" class="btn-gold">I Know What I Want — Get Started</a>
+<a href="index.html#signup" class="btn-outline-w">Free Consultation</a>
+</div>
+<div class="cta-phone">(214) 943-1099</div>
+</section>
+
+<footer>
+&copy; 2026 PCS Tax Service &amp; Academy &middot; Dallas, Texas &middot; <a href="index.html">accounting.pcstaxservice.com</a> &middot; <a href="pay.html">Pay My Bill</a>
+</footer>
+
+</body>
+</html>

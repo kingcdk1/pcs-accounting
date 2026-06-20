@@ -69,10 +69,12 @@ section{padding:72px 40px;position:relative}
 .svc-card{margin:26px auto 0;max-width:560px}
 .svc-card.wide{max-width:940px}
 .svc-card img{width:100%;height:auto;display:block;border-radius:var(--radius);border:1px solid var(--gold-line);box-shadow:var(--shadow)}
-.svc-cta{margin-top:26px;display:flex;flex-direction:column;align-items:center;gap:10px}
-.svc-cta .btn-gold{min-height:48px;display:inline-flex;align-items:center;justify-content:center}
+.svc-cta{margin-top:26px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.svc-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.svc-cta .btn-gold,.svc-cta .btn-outline-w{min-height:48px;display:inline-flex;align-items:center;justify-content:center}
 .svc-cta .risk{font-size:13px;color:var(--text-faint)}
 .svc-cta .risk a{color:var(--gold);font-weight:600}
+@media(max-width:480px){.svc-btns{flex-direction:column;width:100%;max-width:320px}.svc-btns .btn-gold,.svc-btns .btn-outline-w{width:100%}}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 .showpiece{position:relative;overflow:hidden}
@@ -125,6 +127,7 @@ footer a{color:var(--gold);font-weight:600}
 <a href="index.html"><div class="logo-text">PCS Tax Service: <span>FOR BUSINESS</span></div><div class="logo-sub">PCS Tax Service &amp; Academy</div></a>
 <div class="nav-links">
 <a href="index.html">Home</a>
+<a href="investments.html">Investments</a>
 <a href="index.html#pricing">Pricing</a>
 <a href="pay.html">Pay Bill</a>
 <a href="index.html#signup" class="nav-cta">Get Started</a>
@@ -183,8 +186,11 @@ footer a{color:var(--gold);font-weight:600}
 <img src="compliance_services.webp" alt="Government Filings, Handled. We deal with the agencies so you don't have to: Texas Workforce Commission filings and payments, payroll processing and tax deposits, State Comptroller Sales & Use Tax, State Comptroller Franchise Tax, State and Federal tax returns, and multi-state compliance in any state." loading="lazy">
 </figure>
 <div class="svc-cta">
-<a href="index.html#signup" class="btn-gold">Free Consultation</a>
-<div class="risk">No obligation. Free consultation. &nbsp;&middot;&nbsp; <a href="tel:+12149431099">(214) 943-1099</a></div>
+<div class="svc-btns">
+<a href="index.html#pricing" class="btn-gold">I Know What I Want — Get Started</a>
+<a href="index.html#signup" class="btn-outline-w">Free Consultation</a>
+</div>
+<div class="risk">No obligation. &nbsp;&middot;&nbsp; <a href="tel:+12149431099">(214) 943-1099</a></div>
 </div>
 </div>
 </section>
@@ -207,30 +213,27 @@ footer a{color:var(--gold);font-weight:600}
 <img src="legal_entity_services_wide.webp" alt="Legal & Entity Services, backed by in-house counsel: trusts (revocable, irrevocable, land and asset protection), S-Corp and C-Corp elections, LLC and entity formation, entity migrations and conversions, NDA and contract review, and capital contribution and distribution analysis." loading="lazy">
 </figure>
 <div class="svc-cta">
-<a href="index.html#signup" class="btn-gold">Talk to Our Counsel</a>
-<div class="risk">No obligation. Free consultation. &nbsp;&middot;&nbsp; <a href="tel:+12149431099">(214) 943-1099</a></div>
+<div class="svc-btns">
+<a href="index.html#pricing" class="btn-gold">I Know What I Want — Get Started</a>
+<a href="index.html#signup" class="btn-outline-w">Talk to Our Counsel</a>
+</div>
+<div class="risk">No obligation. &nbsp;&middot;&nbsp; <a href="tel:+12149431099">(214) 943-1099</a></div>
 </div>
 </div>
 </section>
 
-<!-- STRATEGIES FOR YOUR INVESTMENTS (traders) -->
-<section class="svc" id="traders">
+<!-- INVESTMENTS TEASER (full section lives on investments.html) -->
+<section class="svc" id="investments-teaser">
 <div class="section-inner">
-<div class="svc-eyebrow">Strategies For Your Investments</div>
-<h2 class="sr-only">Strategies For Your Investments</h2>
-<p class="sr-only">For traders &amp; active investors.</p>
-<ul class="sr-only">
-<li>Trader Tax Status &amp; Mark-to-Market Elections</li>
-<li>Wash Sale Tracking &amp; Schedule D</li>
-<li>Capital Gains Planning</li>
-<li>K-1 &amp; Pass-Through Reporting</li>
-</ul>
-<figure class="svc-card wide">
-<img src="investment_strategies_wide.webp" alt="Strategies For Your Investments, for traders and active investors: trader tax status and mark-to-market elections, wash sale tracking and Schedule D, capital gains planning, and K-1 and pass-through reporting." loading="lazy">
-</figure>
+<div class="svc-eyebrow">For Traders &amp; Active Investors</div>
+<h2 class="section-title" style="font-size:clamp(26px,3.6vw,38px)">Strategies For Your Investments</h2>
+<div class="section-sub" style="margin:0 auto 6px">Trader tax status, mark-to-market, wash sales &amp; Schedule D, capital gains planning, K-1 &amp; pass-through reporting.</div>
 <div class="svc-cta">
-<a href="index.html#signup" class="btn-gold">Free Consultation</a>
-<div class="risk">No obligation. Free consultation. &nbsp;&middot;&nbsp; <a href="tel:+12149431099">(214) 943-1099</a></div>
+<div class="svc-btns">
+<a href="investments.html" class="btn-gold">Explore Investment Services</a>
+<a href="index.html#signup" class="btn-outline-w">Free Consultation</a>
+</div>
+<div class="risk">No obligation. &nbsp;&middot;&nbsp; <a href="tel:+12149431099">(214) 943-1099</a></div>
 </div>
 </div>
 </section>
