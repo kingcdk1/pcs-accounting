@@ -359,8 +359,18 @@ section + section::before{content:'';position:absolute;top:0;left:50%;transform:
 .report-chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px;align-items:center}
 .report-chips a{font-size:13.5px;font-weight:600;color:var(--text);border:1px solid var(--gold-line);background:var(--gold-soft);border-radius:30px;padding:9px 18px;letter-spacing:.3px;transition:all .25s}
 .report-chips a:hover{background:var(--gold);color:#1a1408}
-.report-chips .chips-more{font-size:15px;font-weight:700;letter-spacing:.3px;color:#fff;background:var(--blue);border:1px solid var(--blue);border-radius:30px;padding:12px 26px;box-shadow:0 8px 24px -12px var(--blue-glow);margin-left:4px}
-.report-chips .chips-more:hover{background:var(--blue-light);border-color:var(--blue-light);color:#fff;transform:translateY(-1px)}
+/* big dynamic "See All Reports" CTA */
+.see-reports-wrap{text-align:center;margin-top:34px}
+.see-reports{display:inline-flex;align-items:center;gap:16px;position:relative;overflow:hidden;font-family:'Source Sans 3',sans-serif;font-size:clamp(18px,2.4vw,23px);font-weight:800;letter-spacing:.4px;color:#fff;background:linear-gradient(135deg,var(--blue),#1f5bb0);border:1px solid var(--gold);border-radius:40px;padding:18px 44px;box-shadow:0 0 0 4px var(--gold-soft),0 14px 36px -10px var(--blue-glow);animation:srPulse 2.8s ease-in-out infinite;transition:transform .25s}
+.see-reports:hover{transform:translateY(-3px) scale(1.02)}
+.see-reports .star{color:var(--gold);font-size:1em;line-height:1;text-shadow:0 0 12px var(--gold-glow);animation:srTwinkle 1.9s ease-in-out infinite}
+.see-reports .star:last-child{animation-delay:.95s}
+.see-reports::before{content:'';position:absolute;top:0;left:-70%;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-18deg);animation:srShine 3.4s ease-in-out infinite;pointer-events:none}
+.see-reports-sub{margin-top:13px;font-size:14px;color:var(--gold);font-weight:600;letter-spacing:.3px}
+@keyframes srPulse{0%,100%{box-shadow:0 0 0 3px var(--gold-soft),0 12px 30px -12px var(--blue-glow)}50%{box-shadow:0 0 0 7px var(--gold-soft),0 18px 46px -8px var(--blue-glow)}}
+@keyframes srTwinkle{0%,100%{opacity:.5;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+@keyframes srShine{0%{left:-70%}55%,100%{left:140%}}
+@media(prefers-reduced-motion:reduce){.see-reports,.see-reports .star,.see-reports::before{animation:none}}
 
 /* ===== SERVICE SECTIONS (compliance / legal / traders) ===== */
 .svc{text-align:center}
@@ -528,7 +538,14 @@ section{padding:60px 20px}
 <a href="reports.html#gallery">Budget vs Actual</a>
 <a href="reports.html#gallery">Executive Dashboard</a>
 <a href="reports.html#gallery">CFO Recommendations</a>
-<a href="reports.html" class="chips-more">See All Reports &rarr;</a>
+</div>
+<div class="see-reports-wrap">
+<a href="reports.html" class="see-reports">
+<span class="star">&#10022;</span>
+<span class="see-reports-txt">See All Our Reports</span>
+<span class="star">&#10022;</span>
+</a>
+<div class="see-reports-sub">Reports other firms simply don&rsquo;t do &mdash; take a look</div>
 </div>
 </div>
 </section>
