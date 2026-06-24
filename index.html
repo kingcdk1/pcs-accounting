@@ -203,7 +203,7 @@ section + section::before{content:'';position:absolute;top:0;left:50%;transform:
 .intro-banner .banner-label{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:4px}
 .intro-banner .banner-text{font-size:15px;color:var(--text-dim);font-weight:300}
 .intro-banner .banner-icon{font-size:32px;min-width:40px;text-align:center}
-.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:16px}
+.plans-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:16px}
 .plan-card{background:var(--marble-2);border:1px solid var(--border);border-radius:var(--radius);padding:38px 28px;position:relative;transition:all .35s}
 .plan-card:hover{border-color:var(--gold-line);transform:translateY(-4px);box-shadow:var(--shadow)}
 .plan-card.featured{border-color:var(--gold);background:var(--marble-3);box-shadow:0 0 0 1px var(--gold-line),var(--shadow)}
@@ -699,7 +699,7 @@ section{padding:60px 20px}
 <div class="plan-badge">Most Popular</div>
 <div class="plan-name">Premium</div>
 <div class="plan-tagline">Like having your own accountant</div>
-<div class="plan-price">$1,250<span style="font-size:16px;color:rgba(255,255,255,.3);font-family:'Source Sans 3',sans-serif;font-weight:300">/mo</span></div>
+<div class="plan-price">$1,450<span style="font-size:16px;color:rgba(255,255,255,.3);font-family:'Source Sans 3',sans-serif;font-weight:300">/mo</span></div>
 <div class="plan-regular"><span class="strike">$2,625/mo</span><span class="rate-label">regular rate</span></div>
 <ul class="plan-features">
 <li>Unlimited transactions</li>
@@ -713,6 +713,23 @@ section{padding:60px 20px}
 <li>Priority response</li>
 </ul>
 <a href="#payment" class="btn-plan btn-plan-gold">Get Started</a>
+</div>
+<!-- Enterprise -->
+<div class="plan-card">
+<div class="plan-name">Enterprise</div>
+<div class="plan-tagline">A full finance department, on call</div>
+<div class="plan-price" style="font-size:40px">Custom</div>
+<div class="plan-regular"><span class="rate-label">Tailored to your business</span></div>
+<ul class="plan-features">
+<li>Everything in Premium</li>
+<li>Multiple entities &amp; businesses</li>
+<li>Dedicated CFO &amp; accounting team</li>
+<li>Weekly or on-demand strategy calls</li>
+<li>Custom reporting &amp; KPIs</li>
+<li>Audit &amp; lender-ready packages</li>
+<li>Same-day priority response</li>
+</ul>
+<a href="#signup" class="btn-plan btn-plan-outline">Talk to Us</a>
 </div>
 </div>
 <div class="plans-note">All plans billed annually. Month-to-month available at standard rates. Free consultation to find your fit.</div>
@@ -779,7 +796,7 @@ section{padding:60px 20px}
 </div>
 <div class="checkout-plan">
 <div class="cp-name" id="coPlanName">Premium Plan</div>
-<div class="cp-price" id="coPlanPrice">$1,250<span>/mo</span></div>
+<div class="cp-price" id="coPlanPrice">$1,450<span>/mo</span></div>
 </div>
 </div>
 
@@ -822,7 +839,7 @@ section{padding:60px 20px}
 <div class="pay-field"><select id="coPlanSelect" onchange="updatePlanSummary()">
 <option value="Starter|$450">Starter &mdash; $450/mo</option>
 <option value="Growth|$850">Growth &mdash; $850/mo</option>
-<option value="Premium|$1,250" selected>Premium &mdash; $1,250/mo</option>
+<option value="Premium|$1,450" selected>Premium &mdash; $1,450/mo</option>
 </select></div>
 </div>
 </div>
