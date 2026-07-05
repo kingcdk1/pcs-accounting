@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Leads — PCS Accounting Back End</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --ink:#0b0d12; --panel:#12151d; --panel2:#171b25; --line:rgba(212,175,55,.18);
+    --gold:#d4af37; --gold-soft:#e8ce7a; --blue:#3b82f6; --blue-deep:#2563eb;
+    --text:#e8e6e1; --muted:#9aa0ac; --ok:#34d399; --warn:#fbbf24; --bad:#f87171;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--ink);color:var(--text);font:15px/1.5 'Segoe UI',system-ui,sans-serif;min-height:100vh}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;opacity:.05;pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.008 0.012' numOctaves='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.83 0 0 0 0 0.69 0 0 0 0 0.22 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23m)'/%3E%3C/svg%3E");}
+  .wrap{max-width:1100px;margin:0 auto;padding:28px 18px 80px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:26px}
+  .brand{font-size:20px;font-weight:700;letter-spacing:.5px}
+  .brand span{color:var(--gold)}
+  .who{font-size:13px;color:var(--muted)}
+  .btn{display:inline-block;border:0;border-radius:10px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;transition:.15s}
+  .btn-blue{background:var(--blue);color:#fff}.btn-blue:hover{background:var(--blue-deep)}
+  .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}.btn-ghost:hover{color:var(--text)}
+  .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1408}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:22px}
+  .card h2{font-size:16px;margin-bottom:14px;color:var(--gold-soft);letter-spacing:.4px}
+  /* login */
+  #gate{max-width:420px;margin:8vh auto;text-align:center}
+  #gate p{color:var(--muted);margin:10px 0 22px}
+  /* leads table */
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th{color:var(--muted);text-align:left;font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top}
+  tr:hover td{background:rgba(59,130,246,.05)}
+  .tbl-scroll{overflow-x:auto}
+  .pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600}
+  .pill.new{background:rgba(59,130,246,.15);color:#93c5fd}
+  .pill.contacted{background:rgba(251,191,36,.14);color:var(--warn)}
+  .pill.closed{background:rgba(52,211,153,.13);color:var(--ok)}
+  select.status{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:12.5px}
+  .muted{color:var(--muted)} .small{font-size:12.5px}
+  /* notify panel */
+  .recip{display:flex;align-items:center;gap:12px;padding:10px 4px;border-bottom:1px solid rgba(255,255,255,.05);flex-wrap:wrap}
+  .recip input[type=text],.recip input[type=email], .addrow input{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13.5px}
+  .recip .lbl{width:130px}.recip .eml{flex:1;min-width:220px}
+  .switch{position:relative;width:46px;height:24px;flex:0 0 auto}
+  .switch input{opacity:0;width:0;height:0}
+  .slider{position:absolute;inset:0;background:#3a3f4d;border-radius:99px;cursor:pointer;transition:.2s}
+  .slider:before{content:"";position:absolute;height:18px;width:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+  .switch input:checked + .slider{background:var(--ok)}
+  .switch input:checked + .slider:before{transform:translateX(22px)}
+  .addrow{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .addrow input{flex:1;min-width:160px}
+  .note{font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.55}
+  .flash{padding:10px 14px;border-radius:10px;font-size:13.5px;margin-bottom:14px;display:none}
+  .flash.ok{display:block;background:rgba(52,211,153,.1);color:var(--ok);border:1px solid rgba(52,211,153,.25)}
+  .flash.err{display:block;background:rgba(248,113,113,.1);color:var(--bad);border:1px solid rgba(248,113,113,.25)}
+  .topbtns{display:flex;gap:10px;flex-wrap:wrap}
+  @media(max-width:640px){ th,td{padding:7px 6px} .recip .lbl{width:100%} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">PCS <span>ACCOUNTING</span> — Back End</div>
+    <div class="topbtns">
+      <span class="who" id="who"></span>
+      <button class="btn btn-ghost" id="refreshBtn" style="display:none">Refresh</button>
+      <button class="btn btn-ghost" id="outBtn" style="display:none">Sign out</button>
+    </div>
+  </header>
+
+  <!-- LOGIN GATE -->
+  <div id="gate" class="card">
+    <h2>Team Sign-In</h2>
+    <p>Applications &amp; leads for accounting.pcstaxservice.com.<br>Authorized team only.</p>
+    <button class="btn btn-blue" id="googleBtn">Sign in with Google</button>
+  </div>
+
+  <!-- APP -->
+  <div id="app" style="display:none">
+    <div class="flash" id="flash"></div>
+
+    <div class="card">
+      <h2>Leads &amp; Applications <span class="muted small" id="count"></span></h2>
+      <div class="tbl-scroll">
+        <table id="leadsTbl">
+          <thead><tr>
+            <th>When</th><th>Name</th><th>Contact</th><th>Business</th><th>Plan</th><th>Message</th><th>Referred by</th><th>Source</th><th>Status</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="note" id="emptyNote" style="display:none">No leads yet — they'll appear here the moment one comes in (they also email the team).</div>
+    </div>
+
+    <div class="card" id="notifyCard" style="display:none">
+      <h2>Where Leads Go — notification recipients</h2>
+      <div id="recips"></div>
+      <div class="addrow">
+        <input type="text" id="newLbl" placeholder="Name (e.g. Ginger)">
+        <input type="email" id="newEml" placeholder="email@gmail.com">
+        <button class="btn btn-gold" id="addBtn">Add recipient</button>
+      </div>
+      <div class="note">Toggle OFF = stays saved, stops receiving. Only admins see this panel. Changes save instantly to the database; the email sender reads this list (interim: also mirrored in the server setting until the final cutover).</div>
+    </div>
+
+    <div class="card">
+      <h2>Instructions &amp; Training</h2>
+      <div class="note">
+        1. Every application from the website lands here automatically AND emails the people toggled ON above.<br>
+        2. Work a lead → set its Status (New → Contacted → Closed). Everyone sees the same board.<br>
+        3. To add/remove who gets the emails: admins use "Where Leads Go" above — no developer needed.<br>
+        4. Sign-in is your Gmail. If you can sign in but see nothing, an admin needs to approve your profile.<br>
+        5. Refresh button (top right) reloads leads and recipients.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SB_URL  = 'https://mxuenhsdknlevlytneku.supabase.co';
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14dWVuaHNka25sZXZseXRuZWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMDAyNzMsImV4cCI6MjA5ODc3NjI3M30.5pNV45oYV17jGgtvcNaD-Tsnr9Kqll9SgNtRPsNwaBw';
+const db = supabase.createClient(SB_URL, SB_ANON);
+
+const $ = id => document.getElementById(id);
+function flash(msg, ok=true){ const f=$('flash'); f.textContent=msg; f.className='flash '+(ok?'ok':'err'); setTimeout(()=>f.className='flash',4000); }
+const esc = s => (s??'').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+$('googleBtn').onclick = () => db.auth.signInWithOAuth({ provider:'google', options:{ redirectTo: location.origin + location.pathname }});
+$('outBtn').onclick = async () => { await db.auth.signOut(); location.reload(); };
+$('refreshBtn').onclick = () => { loadLeads(); loadRecipients(); };
+
+db.auth.onAuthStateChange((_e, session) => render(session));
+db.auth.getSession().then(({data}) => render(data.session));
+
+async function render(session){
+  if(!session){ $('gate').style.display='block'; $('app').style.display='none'; $('outBtn').style.display='none'; $('refreshBtn').style.display='none'; $('who').textContent=''; return; }
+  $('gate').style.display='none'; $('app').style.display='block';
+  $('outBtn').style.display='inline-block'; $('refreshBtn').style.display='inline-block';
+  $('who').textContent = session.user.email;
+  loadLeads(); loadRecipients();
+}
+
+async function loadLeads(){
+  const { data, error } = await db.from('leads').select('*').order('created_at',{ascending:false}).limit(500);
+  const tb = $('leadsTbl').querySelector('tbody'); tb.innerHTML='';
+  if(error){ flash('Cannot load leads: '+error.message+' (if you just signed in, an admin may need to approve your profile)', false); return; }
+  $('count').textContent = '— '+data.length+' total';
+  $('emptyNote').style.display = data.length? 'none':'block';
+  for(const L of data){
+    const tr = document.createElement('tr');
+    const when = new Date(L.created_at).toLocaleString('en-US',{month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit'});
+    tr.innerHTML = `<td class="small muted">${when}</td>
+      <td><strong>${esc(L.name)||'—'}</strong><div class="small muted">${esc(L.type)||''}</div></td>
+      <td class="small">${esc(L.email)||''}<br>${esc(L.phone)||''}</td>
+      <td class="small">${esc(L.business)||''}</td>
+      <td class="small">${esc(L.plan)||''}</td>
+      <td class="small" style="max-width:260px">${esc(L.message)||''}</td>
+      <td class="small">${esc(L.referred_by)||''}</td>
+      <td class="small muted">${esc((L.source||'').replace('https://',''))}</td>
+      <td><select class="status" data-id="${L.id}">
+        ${['new','contacted','closed'].map(s=>`<option value="${s}" ${L.status===s?'selected':''}>${s}</option>`).join('')}
+      </select></td>`;
+    tb.appendChild(tr);
+  }
+  tb.querySelectorAll('select.status').forEach(sel => sel.onchange = async e => {
+    const { error } = await db.from('leads').update({status:e.target.value}).eq('id', e.target.dataset.id);
+    error ? flash('Status update failed: '+error.message,false) : flash('Status updated.');
+  });
+}
+
+async function loadRecipients(){
+  const { data, error } = await db.from('notify_recipients').select('*').order('label');
+  if(error || !data){ $('notifyCard').style.display='none'; return; }   // non-admins: RLS returns error/empty
+  $('notifyCard').style.display='block';
+  const box = $('recips'); box.innerHTML='';
+  for(const r of data){
+    const row = document.createElement('div'); row.className='recip';
+    row.innerHTML = `<input type="text" class="lbl" value="${esc(r.label)||''}" data-id="${r.id}" data-f="label">
+      <input type="email" class="eml" value="${esc(r.email)}" data-id="${r.id}" data-f="email">
+      <label class="switch"><input type="checkbox" ${r.enabled?'checked':''} data-id="${r.id}" data-f="enabled"><span class="slider"></span></label>
+      <button class="btn btn-ghost small" data-del="${r.id}">Remove</button>`;
+    box.appendChild(row);
+  }
+  box.querySelectorAll('input[data-f]').forEach(inp => inp.onchange = async e => {
+    const v = e.target.dataset.f==='enabled' ? e.target.checked : e.target.value.trim();
+    const { error } = await db.from('notify_recipients').update({[e.target.dataset.f]:v, updated_at:new Date().toISOString()}).eq('id', e.target.dataset.id);
+    error ? flash('Save failed: '+error.message,false) : flash('Saved.');
+  });
+  box.querySelectorAll('button[data-del]').forEach(b => b.onclick = async () => {
+    if(!confirm('Remove this recipient? (Toggling OFF keeps them saved instead)')) return;
+    const { error } = await db.from('notify_recipients').delete().eq('id', b.dataset.del);
+    error ? flash('Remove failed: '+error.message,false) : (flash('Removed.'), loadRecipients());
+  });
+}
+
+$('addBtn').onclick = async () => {
+  const label = $('newLbl').value.trim(), email = $('newEml').value.trim();
+  if(!email){ flash('Enter an email.', false); return; }
+  const { error } = await db.from('notify_recipients').insert({label, email, enabled:true});
+  error ? flash('Add failed: '+error.message,false) : (flash('Added — toggled ON.'), $('newLbl').value='', $('newEml').value='', loadRecipients());
+};
+</script>
+</body>
+</html>
