@@ -119,6 +119,9 @@ footer a{color:var(--gold);font-weight:600}
 @media(max-width:1024px){.service-cards,.reports-showcase{grid-template-columns:1fr 1fr}.sp-kpis{grid-template-columns:1fr 1fr}.sp-body{grid-template-columns:1fr}}
 @media(max-width:768px){.nav-links{gap:16px}.nav-links a:not(.nav-cta){display:none}section{padding:56px 20px}.nav-inner{padding:12px 20px}.service-cards,.reports-showcase{grid-template-columns:1fr}.sp-kpis{grid-template-columns:1fr 1fr}.sp-frame{padding:24px 20px}}
 .team-mobile{display:none;margin-left:12px;padding:7px 14px;border:1px solid rgba(212,175,55,.35);border-radius:99px;font-size:13px;color:#e8ce7a;text-decoration:none;white-space:nowrap}
+.ticker-band{margin-top:70px;background:rgba(7,10,20,.92);border-top:1px solid rgba(212,175,55,.22);border-bottom:1px solid rgba(212,175,55,.22);height:46px;overflow:hidden}
+.ticker-band .tradingview-widget-container{height:46px}
+@media(max-width:768px){.ticker-band{margin-top:88px}}
 </style>
 </head>
 <body>
@@ -138,6 +141,29 @@ footer a{color:var(--gold);font-weight:600}
 </div>
 </div>
 </nav>
+
+<div class="ticker-band">
+<div class="tradingview-widget-container">
+<div class="tradingview-widget-container__widget"></div>
+<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+{
+"symbols": [
+{"proName": "FOREXCOM:SPXUSD", "title": "S&P 500"},
+{"proName": "OANDA:US30USD", "title": "Dow Jones"},
+{"proName": "FOREXCOM:NSXUSD", "title": "Nasdaq 100"},
+{"proName": "OANDA:XAUUSD", "title": "Gold"},
+{"proName": "TVC:USOIL", "title": "Crude Oil"},
+{"proName": "TVC:TNX", "title": "10-Yr Treasury"}
+],
+"showSymbolLogos": false,
+"isTransparent": true,
+"displayMode": "regular",
+"colorTheme": "dark",
+"locale": "en"
+}
+</script>
+</div>
+</div>
 
 <!-- PAGE HERO -->
 <section class="page-hero">
