@@ -81,7 +81,11 @@ nav{position:fixed;top:0;left:0;width:100%;z-index:1000;background:rgba(10,14,26
 .mobile-menu span{display:block;width:24px;height:2px;background:var(--text);margin:5px 0;transition:.3s}
 
 /* ===== HERO ===== */
-.hero{min-height:auto;background:linear-gradient(160deg,rgba(10,14,26,.4) 0%,rgba(20,24,42,.5) 60%,rgba(10,14,26,.6) 100%);display:flex;align-items:center;position:relative;overflow:hidden;padding:108px 40px 56px}
+.hero{min-height:auto;background:linear-gradient(160deg,rgba(10,14,26,.4) 0%,rgba(20,24,42,.5) 60%,rgba(10,14,26,.6) 100%);display:flex;align-items:center;position:relative;overflow:hidden;padding:48px 40px 56px}
+/* Market ticker band — under the fixed nav; marble discipline: navy field, gold hairlines, only standard muted green/red on price changes */
+.ticker-band{margin-top:70px;background:rgba(7,10,20,.92);border-top:1px solid rgba(212,175,55,.22);border-bottom:1px solid rgba(212,175,55,.22);height:46px;overflow:hidden}
+.ticker-band .tradingview-widget-container{height:46px}
+@media(max-width:768px){.ticker-band{margin-top:62px}}
 .hero::after{content:'';position:absolute;top:-220px;right:-200px;width:720px;height:720px;background:radial-gradient(circle,var(--gold-glow),transparent 62%);opacity:.5;pointer-events:none}
 .hero-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;width:100%}
 .hero-content{position:relative;z-index:2}
@@ -472,6 +476,30 @@ section{padding:60px 20px}
 </button>
 </div>
 </nav>
+
+<!-- MARKET TICKER (TradingView ticker-tape, dark/transparent to sit in the marble; swap to own /api/quotes later if desired) -->
+<div class="ticker-band">
+<div class="tradingview-widget-container">
+<div class="tradingview-widget-container__widget"></div>
+<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+{
+"symbols": [
+{"proName": "FOREXCOM:SPXUSD", "title": "S&P 500"},
+{"proName": "DJ:DJI", "title": "Dow Jones"},
+{"proName": "FOREXCOM:NSXUSD", "title": "Nasdaq 100"},
+{"proName": "OANDA:XAUUSD", "title": "Gold"},
+{"proName": "TVC:USOIL", "title": "Crude Oil"},
+{"proName": "TVC:TNX", "title": "10-Yr Treasury"}
+],
+"showSymbolLogos": false,
+"isTransparent": true,
+"displayMode": "regular",
+"colorTheme": "dark",
+"locale": "en"
+}
+</script>
+</div>
+</div>
 
 <!-- HERO -->
 <section class="hero">
