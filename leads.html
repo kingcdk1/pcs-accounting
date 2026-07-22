@@ -16,8 +16,8 @@
   body{background:var(--ink);color:var(--text);font:15px/1.5 'Segoe UI',system-ui,sans-serif;min-height:100vh}
   body::before{content:"";position:fixed;inset:0;z-index:-1;opacity:.05;pointer-events:none;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.008 0.012' numOctaves='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.83 0 0 0 0 0.69 0 0 0 0 0.22 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23m)'/%3E%3C/svg%3E");}
-  .wrap{max-width:1100px;margin:0 auto;padding:28px 18px 80px}
-  header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:26px}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 18px 80px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
   .brand{font-size:20px;font-weight:700;letter-spacing:.5px}
   .brand span{color:var(--gold)}
   .who{font-size:13px;color:var(--muted)}
@@ -27,21 +27,38 @@
   .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1408}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:22px}
   .card h2{font-size:16px;margin-bottom:14px;color:var(--gold-soft);letter-spacing:.4px}
-  /* login */
   #gate{max-width:420px;margin:8vh auto;text-align:center}
   #gate p{color:var(--muted);margin:10px 0 22px}
-  /* leads table */
+  /* KPI strip */
+  .kpis{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 20px;min-width:120px}
+  .kpi .n{font-size:22px;font-weight:700;color:var(--gold-soft)}
+  .kpi .l{font-size:12px;color:var(--muted)}
+  /* table */
   table{width:100%;border-collapse:collapse;font-size:13.5px}
   th{color:var(--muted);text-align:left;font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
   td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top}
-  tr:hover td{background:rgba(59,130,246,.05)}
+  tr.leadrow{cursor:pointer}
+  tr.leadrow:hover td{background:rgba(59,130,246,.05)}
   .tbl-scroll{overflow-x:auto}
-  .pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600}
-  .pill.new{background:rgba(59,130,246,.15);color:#93c5fd}
-  .pill.contacted{background:rgba(251,191,36,.14);color:var(--warn)}
-  .pill.closed{background:rgba(52,211,153,.13);color:var(--ok)}
+  .pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:11.5px;font-weight:600;white-space:nowrap}
+  .oc-n{color:#9aa0ac}.oc-a{color:var(--warn)}.oc-g{color:var(--ok)}
   select.status{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:12.5px}
   .muted{color:var(--muted)} .small{font-size:12.5px}
+  .tcount{font-weight:700}
+  .badge-auto{background:rgba(59,130,246,.15);color:#93c5fd;border-radius:6px;padding:1px 7px;font-size:11px}
+  /* detail / touch logger */
+  tr.detail td{background:var(--panel2);padding:16px 18px}
+  .hist{margin-bottom:14px;max-height:220px;overflow-y:auto}
+  .hist .t{display:flex;gap:10px;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:12.5px;flex-wrap:wrap}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+  .chip{padding:6px 14px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:12.5px;cursor:pointer}
+  .chip.selb{background:rgba(59,130,246,.18);color:#93c5fd;border-color:#3b82f6}
+  .chip.seln{background:rgba(154,160,172,.15);color:var(--text);border-color:#9aa0ac}
+  .chip.sela{background:rgba(251,191,36,.15);color:var(--warn);border-color:var(--warn)}
+  .chip.selg{background:rgba(52,211,153,.15);color:var(--ok);border-color:var(--ok)}
+  .notein{width:100%;background:var(--ink);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;margin:8px 0}
+  .remnote{font-size:12px;color:var(--warn);margin-top:8px}
   /* notify panel */
   .recip{display:flex;align-items:center;gap:12px;padding:10px 4px;border-bottom:1px solid rgba(255,255,255,.05);flex-wrap:wrap}
   .recip input[type=text],.recip input[type=email], .addrow input{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13.5px}
@@ -73,23 +90,29 @@
     </div>
   </header>
 
-  <!-- LOGIN GATE -->
   <div id="gate" class="card">
     <h2>Team Sign-In</h2>
     <p>Applications &amp; leads for accounting.pcstaxservice.com.<br>Authorized team only.</p>
     <button class="btn btn-blue" id="googleBtn">Sign in with Google</button>
   </div>
 
-  <!-- APP -->
   <div id="app" style="display:none">
     <div class="flash" id="flash"></div>
 
+    <div class="kpis">
+      <div class="kpi"><div class="n" id="kTotal">0</div><div class="l">Total leads</div></div>
+      <div class="kpi"><div class="n" id="kWeek">0</div><div class="l">Touched this week</div></div>
+      <div class="kpi"><div class="n" id="kEngaged">0</div><div class="l">Engaged (replied)</div></div>
+      <div class="kpi"><div class="n" id="kUntouched">0</div><div class="l">Never touched</div></div>
+    </div>
+
     <div class="card">
       <h2>Leads &amp; Applications <span class="muted small" id="count"></span></h2>
+      <div class="note" style="margin:0 0 10px">Click a lead to see its touch history and log a touch.</div>
       <div class="tbl-scroll">
         <table id="leadsTbl">
           <thead><tr>
-            <th>When</th><th>Name</th><th>Contact</th><th>Business</th><th>Plan</th><th>Message</th><th>Referred by</th><th>Source</th><th>Status</th>
+            <th>When</th><th>Name</th><th>Contact</th><th>Type</th><th>Touches</th><th>Last Result</th><th>Last By</th><th>Status</th>
           </tr></thead>
           <tbody></tbody>
         </table>
@@ -111,11 +134,12 @@
     <div class="card">
       <h2>Instructions &amp; Training</h2>
       <div class="note">
-        1. Every application from the website lands here automatically AND emails the people toggled ON above.<br>
-        2. Work a lead → set its Status (New → Contacted → Closed). Everyone sees the same board.<br>
-        3. To add/remove who gets the emails: admins use "Where Leads Go" above — no developer needed.<br>
-        4. Sign-in is your Gmail. If you can sign in but see nothing, an admin needs to approve your profile.<br>
-        5. Refresh button (top right) reloads leads and recipients.
+        1. Every application (website form or Facebook) lands here automatically AND emails the people toggled ON above.<br>
+        2. Click a lead → its touch history opens. Log EVERY contact attempt: pick channel (Text/Email/Call), pick result (No Reply / Reply / ✅ Successful), add a note, Log Touch. Your name is recorded automatically.<br>
+        3. The counter tracks HUMAN touches out of 8. If a lead replies, the count pauses (engaged). 8 human touches with no engagement → the lead auto-moves to REMARKETING. Leads are never deleted.<br>
+        4. Statuses: New → Contacted → Show → Filed. Special: HOT, Duplicate, Management Review, Remarketing, Jail. Same ladder as the Giveaway board.<br>
+        5. To change who gets the emails: admins use "Where Leads Go" — no developer needed.<br>
+        6. Sign-in is your Gmail. If you can sign in but see nothing, an admin needs to approve your profile.
       </div>
     </div>
   </div>
@@ -126,13 +150,19 @@ const SB_URL  = 'https://mxuenhsdknlevlytneku.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14dWVuaHNka25sZXZseXRuZWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMDAyNzMsImV4cCI6MjA5ODc3NjI3M30.5pNV45oYV17jGgtvcNaD-Tsnr9Kqll9SgNtRPsNwaBw';
 const db = supabase.createClient(SB_URL, SB_ANON);
 
+// touch model — EXACT giveaway standard
+const RES={no_reply:['No Reply','oc-n'],reply:['Reply','oc-a'],successful:['Successful','oc-g']};
+const STATUSES=['new','contacted','show','filed','hot','duplicate','management_review','remarketing','jail'];
+const STATUS_LABEL={new:'New',contacted:'Contacted',show:'Show',filed:'Filed',hot:'HOT',duplicate:'Duplicate',management_review:'Mgmt Review',remarketing:'Remarketing',jail:'Jail'};
+let LEADS=[], TOUCHES=[], OPENID=null, SEL={chan:null,res:null}, ME={email:'',name:''};
+
 const $ = id => document.getElementById(id);
-function flash(msg, ok=true){ const f=$('flash'); f.textContent=msg; f.className='flash '+(ok?'ok':'err'); setTimeout(()=>f.className='flash',4000); }
+function flash(msg, ok=true){ const f=$('flash'); f.textContent=msg; f.className='flash '+(ok?'ok':'err'); setTimeout(()=>f.className='flash',4500); }
 const esc = s => (s??'').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 $('googleBtn').onclick = () => db.auth.signInWithOAuth({ provider:'google', options:{ redirectTo: location.origin + location.pathname }});
 $('outBtn').onclick = async () => { await db.auth.signOut(); location.reload(); };
-$('refreshBtn').onclick = () => { loadLeads(); loadRecipients(); };
+$('refreshBtn').onclick = () => loadAll();
 
 db.auth.onAuthStateChange((_e, session) => render(session));
 db.auth.getSession().then(({data}) => render(data.session));
@@ -141,31 +171,61 @@ async function render(session){
   if(!session){ $('gate').style.display='block'; $('app').style.display='none'; $('outBtn').style.display='none'; $('refreshBtn').style.display='none'; $('who').textContent=''; return; }
   $('gate').style.display='none'; $('app').style.display='block';
   $('outBtn').style.display='inline-block'; $('refreshBtn').style.display='inline-block';
-  $('who').textContent = session.user.email;
-  loadLeads(); loadRecipients();
+  ME.email = session.user.email;
+  ME.name  = session.user.user_metadata?.full_name || session.user.email.split('@')[0];
+  $('who').textContent = ME.email;
+  loadAll();
 }
+
+async function loadAll(){ await loadLeads(); await loadTouches(); paint(); loadRecipients(); }
 
 async function loadLeads(){
   const { data, error } = await db.from('leads').select('*').order('created_at',{ascending:false}).limit(500);
+  if(error){ flash('Cannot load leads: '+error.message+' (if you just signed in, an admin may need to approve your profile)', false); LEADS=[]; return; }
+  LEADS = data||[];
+}
+async function loadTouches(){
+  try{ const { data } = await db.from('touches').select('*').order('created_at',{ascending:false}).limit(3000); TOUCHES = data||[]; }
+  catch(e){ TOUCHES = []; }
+}
+
+function annotate(L){
+  L.t = TOUCHES.filter(t=>t.lead_id===L.id);
+  L.human = L.t.filter(t=>!t.is_auto);
+  L.auto  = L.t.filter(t=>t.is_auto);
+  L.engaged = L.t.some(t=>t.result==='reply'||t.result==='successful');
+  L.last = L.t[0]||null;
+}
+
+function paint(){
+  LEADS.forEach(annotate);
+  // KPIs
+  const wk = new Date(Date.now()-7*864e5);
+  $('kTotal').textContent = LEADS.length;
+  $('kWeek').textContent = LEADS.filter(L=>L.t.some(t=>new Date(t.created_at)>wk)).length;
+  $('kEngaged').textContent = LEADS.filter(L=>L.engaged).length;
+  $('kUntouched').textContent = LEADS.filter(L=>!L.t.length).length;
+  $('count').textContent = '— '+LEADS.length+' total';
+  $('emptyNote').style.display = LEADS.length? 'none':'block';
+  // rows
   const tb = $('leadsTbl').querySelector('tbody'); tb.innerHTML='';
-  if(error){ flash('Cannot load leads: '+error.message+' (if you just signed in, an admin may need to approve your profile)', false); return; }
-  $('count').textContent = '— '+data.length+' total';
-  $('emptyNote').style.display = data.length? 'none':'block';
-  for(const L of data){
-    const tr = document.createElement('tr');
+  for(const L of LEADS){
     const when = new Date(L.created_at).toLocaleString('en-US',{month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit'});
+    const lastRes = L.last ? `<span class="${RES[L.last.result]?.[1]||'oc-n'}">${RES[L.last.result]?.[0]||'—'}</span>` : '<span class="oc-n">—</span>';
+    const lastBy  = L.last ? (L.last.is_auto? '<span class="badge-auto">🤖 Auto</span>' : esc(L.last.by_name||L.last.touched_by||'')) : '<span class="muted">—</span>';
+    const tr = document.createElement('tr'); tr.className='leadrow'; tr.dataset.id=L.id;
     tr.innerHTML = `<td class="small muted">${when}</td>
-      <td><strong>${esc(L.name)||'—'}</strong><div class="small muted">${esc(L.type)||''}</div></td>
+      <td><strong>${esc(L.name)||'—'}</strong><div class="small muted">${esc(L.business)||''}</div></td>
       <td class="small">${esc(L.email)||''}<br>${esc(L.phone)||''}</td>
-      <td class="small">${esc(L.business)||''}</td>
-      <td class="small">${esc(L.plan)||''}</td>
-      <td class="small" style="max-width:260px">${esc(L.message)||''}</td>
-      <td class="small">${esc(L.referred_by)||''}</td>
-      <td class="small muted">${esc((L.source||'').replace('https://',''))}</td>
-      <td><select class="status" data-id="${L.id}">
-        ${['new','contacted','closed'].map(s=>`<option value="${s}" ${L.status===s?'selected':''}>${s}</option>`).join('')}
+      <td class="small muted">${esc((L.type||'').replace('FB — ','FB · '))}</td>
+      <td><span class="tcount">${L.t.length}</span> <span class="small muted">(${L.human.length}👤 ${L.auto.length}🤖)</span></td>
+      <td>${lastRes}</td><td class="small">${lastBy}</td>
+      <td><select class="status" data-id="${L.id}" onclick="event.stopPropagation()">
+        ${STATUSES.map(s=>`<option value="${s}" ${L.status===s?'selected':''}>${STATUS_LABEL[s]}</option>`).join('')}
       </select></td>`;
+    tr.onclick = () => toggleDetail(L.id);
     tb.appendChild(tr);
+    if(OPENID===L.id) tb.appendChild(detailRow(L));
   }
   tb.querySelectorAll('select.status').forEach(sel => sel.onchange = async e => {
     const { error } = await db.from('leads').update({status:e.target.value}).eq('id', e.target.dataset.id);
@@ -173,9 +233,57 @@ async function loadLeads(){
   });
 }
 
+function toggleDetail(id){ OPENID = (OPENID===id)? null : id; SEL={chan:null,res:null}; paint(); }
+
+function chip(kind,val,label,cls){
+  const on = SEL[kind]===val;
+  return `<button class="chip ${on?cls:''}" onclick="event.stopPropagation();SEL.${kind}='${val}';paint()">${label}</button>`;
+}
+
+function detailRow(L){
+  const tr = document.createElement('tr'); tr.className='detail';
+  const hist = L.t.length ? L.t.map(t=>{
+    const when = new Date(t.created_at).toLocaleString('en-US',{month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit'});
+    const who = t.is_auto? '<span class="badge-auto">🤖 Auto</span>' : esc(t.by_name||t.touched_by||'');
+    const r = RES[t.result]||['',''];
+    return `<div class="t"><span class="muted small">${when}</span><strong>${esc(t.channel||'')}</strong><span class="${r[1]}">${r[0]}</span><span>${who}</span><span class="muted small">${esc(t.note||'')}</span></div>`;
+  }).join('') : '<div class="small muted">No touches yet.</div>';
+  const msg = L.message ? `<div class="small muted" style="margin-bottom:10px">📝 ${esc(L.message)}</div>` : '';
+  tr.innerHTML = `<td colspan="8">
+    ${msg}
+    <div class="hist">${hist}</div>
+    <div class="small" style="color:var(--gold-soft)">Log a touch</div>
+    <div class="chips">${chip('chan','text','Text','selb')}${chip('chan','email','Email','selb')}${chip('chan','call','Call','selb')}</div>
+    <div class="chips">${chip('res','no_reply','No Reply','seln')}${chip('res','reply','Reply','sela')}${chip('res','successful','✅ Successful','selg')}</div>
+    <input class="notein" id="touchNote" placeholder="Note (optional — what happened?)" onclick="event.stopPropagation()">
+    <button class="btn btn-gold" onclick="event.stopPropagation();logTouch('${L.id}')">Log Touch</button>
+    <div class="remnote">⏳ ${L.human.length} of 8 human touches used${L.engaged?' · engaged (reply received — count paused)':''}. At 8 with no engagement → auto-flag Remarketing. Never deleted.</div>
+  </td>`;
+  return tr;
+}
+
+async function logTouch(id){
+  if(!SEL.chan || !SEL.res){ flash('Pick a channel AND a result first.', false); return; }
+  const L = LEADS.find(x=>x.id===id); if(!L) return;
+  const note = ($('touchNote')?.value||'').trim();
+  const { error } = await db.from('touches').insert({
+    lead_id:id, touched_by:ME.email, by_name:ME.name,
+    is_auto:false, channel:SEL.chan, result:SEL.res, note
+  });
+  if(error){ flash('Touch failed: '+error.message, false); return; }
+  let msg='Touch logged.';
+  if(SEL.res==='no_reply' && !L.engaged && L.human.length+1>=8){
+    await db.from('leads').update({status:'remarketing'}).eq('id',id);
+    msg='Touch logged — 8 human touches, no engagement → moved to REMARKETING.';
+  }
+  SEL={chan:null,res:null};
+  flash(msg);
+  await loadAll();
+}
+
 async function loadRecipients(){
   const { data, error } = await db.from('notify_recipients').select('*').order('label');
-  if(error || !data){ $('notifyCard').style.display='none'; return; }   // non-admins: RLS returns error/empty
+  if(error || !data || !data.length){ $('notifyCard').style.display='none'; return; }
   $('notifyCard').style.display='block';
   const box = $('recips'); box.innerHTML='';
   for(const r of data){
