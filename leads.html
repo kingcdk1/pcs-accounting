@@ -84,6 +84,7 @@
   <header>
     <div class="brand">PCS <span>ACCOUNTING</span> — Back End</div>
     <div class="topbtns">
+      <a href="index.html" class="btn btn-ghost">&larr; Site</a>
       <span class="who" id="who"></span>
       <button class="btn btn-ghost" id="refreshBtn" style="display:none">Refresh</button>
       <button class="btn btn-ghost" id="outBtn" style="display:none">Sign out</button>
@@ -107,7 +108,7 @@
     </div>
 
     <div class="card">
-      <h2>Leads &amp; Applications <span class="muted small" id="count"></span></h2>
+      <h2>Leads &amp; Applications <span class="muted small" id="count"></span> <button class="btn btn-ghost small" id="archBtn" style="display:none;float:right" onclick="SHOW_ARCHIVED.on=!SHOW_ARCHIVED.on;paint()">Show archived</button></h2>
       <div class="note" style="margin:0 0 10px">Click a lead to see its touch history and log a touch.</div>
       <div class="tbl-scroll">
         <table id="leadsTbl">
@@ -136,7 +137,9 @@
       <div class="note">
         1. Every application (website form or Facebook) lands here automatically AND emails the people toggled ON above.<br>
         2. Click a lead → its touch history opens. Log EVERY contact attempt: pick channel (Text/Email/Call), pick result (No Reply / Reply / ✅ Successful), add a note, Log Touch. Your name is recorded automatically.<br>
-        3. The counter tracks HUMAN touches out of 8. If a lead replies, the count pauses (engaged). 8 human touches with no engagement → the lead auto-moves to REMARKETING. Leads are never deleted.<br>
+        3. NOTES ARE REQUIRED: you cannot log a touch, change a status, or archive without writing a note. Pin important notes with the Pin button — pinned notes stay at the top.<br>
+        3b. Deleting: leads NEVER delete directly — Archive first (note required). Only an ADMIN can permanently delete an archived lead.<br>
+        3c. The counter tracks HUMAN touches out of 8. If a lead replies, the count pauses (engaged). 8 human touches with no engagement → the lead auto-moves to REMARKETING. Leads are never deleted.<br>
         4. Statuses: New → Contacted → Show → Filed. Special: HOT, Duplicate, Management Review, Remarketing, Jail. Same ladder as the Giveaway board.<br>
         5. To change who gets the emails: admins use "Where Leads Go" — no developer needed.<br>
         6. Sign-in is your Gmail. If you can sign in but see nothing, an admin needs to approve your profile.
@@ -146,6 +149,7 @@
 </div>
 
 <script>
+const BUILD_V = '2026-07-25-1'; // bumped every deploy together with version.json
 const SB_URL  = 'https://mxuenhsdknlevlytneku.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14dWVuaHNka25sZXZseXRuZWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMDAyNzMsImV4cCI6MjA5ODc3NjI3M30.5pNV45oYV17jGgtvcNaD-Tsnr9Kqll9SgNtRPsNwaBw';
 const db = supabase.createClient(SB_URL, SB_ANON);
@@ -153,8 +157,9 @@ const db = supabase.createClient(SB_URL, SB_ANON);
 // touch model — EXACT giveaway standard
 const RES={no_reply:['No Reply','oc-n'],reply:['Reply','oc-a'],successful:['Successful','oc-g']};
 const STATUSES=['new','contacted','show','filed','hot','duplicate','management_review','remarketing','jail'];
-const STATUS_LABEL={new:'New',contacted:'Contacted',show:'Show',filed:'Filed',hot:'HOT',duplicate:'Duplicate',management_review:'Mgmt Review',remarketing:'Remarketing',jail:'Jail'};
-let LEADS=[], TOUCHES=[], OPENID=null, SEL={chan:null,res:null}, ME={email:'',name:''};
+const SHOW_ARCHIVED={on:false};
+const STATUS_LABEL={new:'New',contacted:'Contacted',show:'Show',filed:'Filed',hot:'HOT',duplicate:'Duplicate',management_review:'Mgmt Review',remarketing:'Remarketing',jail:'Jail',archived:'Archived'};
+let LEADS=[], TOUCHES=[], OPENID=null, SEL={chan:null,res:null}, ME={email:'',name:'',admin:false};
 
 const $ = id => document.getElementById(id);
 function flash(msg, ok=true){ const f=$('flash'); f.textContent=msg; f.className='flash '+(ok?'ok':'err'); setTimeout(()=>f.className='flash',4500); }
@@ -163,6 +168,27 @@ const esc = s => (s??'').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'
 $('googleBtn').onclick = () => db.auth.signInWithOAuth({ provider:'google', options:{ redirectTo: location.origin + location.pathname }});
 $('outBtn').onclick = async () => { await db.auth.signOut(); location.reload(); };
 $('refreshBtn').onclick = () => loadAll();
+
+// UPDATE AWARENESS: if a new version deployed, tell everyone to refresh (no stale-cache work)
+async function checkVersion(){
+  try{
+    const r = await fetch('version.json?t='+Math.random(), {cache:'no-store'});
+    const j = await r.json();
+    if(j.v && j.v !== BUILD_V){
+      let b = document.getElementById('updBanner');
+      if(!b){
+        b = document.createElement('div'); b.id='updBanner';
+        b.style.cssText='position:fixed;top:0;left:0;width:100%;z-index:9999;background:linear-gradient(135deg,#d4af37,#e8ce7a);color:#1a1408;font-weight:700;text-align:center;padding:10px;cursor:pointer;font-size:14px';
+        b.textContent = '⚠️ This board was UPDATED — tap here to refresh so you are not working on the old version.';
+        b.onclick = () => location.reload(true);
+        document.body.prepend(b);
+      }
+    }
+  }catch(e){}
+}
+setInterval(checkVersion, 5*60*1000);
+window.addEventListener('focus', checkVersion);
+checkVersion();
 
 db.auth.onAuthStateChange((_e, session) => render(session));
 db.auth.getSession().then(({data}) => render(data.session));
@@ -174,6 +200,7 @@ async function render(session){
   ME.email = session.user.email;
   ME.name  = session.user.user_metadata?.full_name || session.user.email.split('@')[0];
   $('who').textContent = ME.email;
+  try{ const {data:pr}=await db.from('profiles').select('role').eq('id',session.user.id).single(); ME.admin = pr?.role==='admin'; }catch(e){}
   loadAll();
 }
 
@@ -191,7 +218,7 @@ async function loadTouches(){
 
 function annotate(L){
   L.t = TOUCHES.filter(t=>t.lead_id===L.id);
-  L.human = L.t.filter(t=>!t.is_auto);
+  L.human = L.t.filter(t=>!t.is_auto && t.channel);
   L.auto  = L.t.filter(t=>t.is_auto);
   L.engaged = L.t.some(t=>t.result==='reply'||t.result==='successful');
   L.last = L.t[0]||null;
@@ -199,17 +226,19 @@ function annotate(L){
 
 function paint(){
   LEADS.forEach(annotate);
+  const ARCH = LEADS.filter(L=>L.status==='archived');
+  const VIS = SHOW_ARCHIVED.on ? LEADS : LEADS.filter(L=>L.status!=='archived');
   // KPIs
   const wk = new Date(Date.now()-7*864e5);
-  $('kTotal').textContent = LEADS.length;
+  $('kTotal').textContent = LEADS.filter(L=>L.status!=='archived').length;
   $('kWeek').textContent = LEADS.filter(L=>L.t.some(t=>new Date(t.created_at)>wk)).length;
   $('kEngaged').textContent = LEADS.filter(L=>L.engaged).length;
   $('kUntouched').textContent = LEADS.filter(L=>!L.t.length).length;
-  $('count').textContent = '— '+LEADS.length+' total';
-  $('emptyNote').style.display = LEADS.length? 'none':'block';
+  $('count').textContent = '— '+VIS.length+' shown'; const ab=$('archBtn'); if(ab){ab.textContent = SHOW_ARCHIVED.on? 'Hide archived' : 'Show archived ('+ARCH.length+')'; ab.style.display = ARCH.length||SHOW_ARCHIVED.on ? 'inline-block':'none';}
+  $('emptyNote').style.display = VIS.length? 'none':'block';
   // rows
   const tb = $('leadsTbl').querySelector('tbody'); tb.innerHTML='';
-  for(const L of LEADS){
+  for(const L of VIS){
     const when = new Date(L.created_at).toLocaleString('en-US',{month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit'});
     const lastRes = L.last ? `<span class="${RES[L.last.result]?.[1]||'oc-n'}">${RES[L.last.result]?.[0]||'—'}</span>` : '<span class="oc-n">—</span>';
     const lastBy  = L.last ? (L.last.is_auto? '<span class="badge-auto">🤖 Auto</span>' : esc(L.last.by_name||L.last.touched_by||'')) : '<span class="muted">—</span>';
@@ -220,16 +249,20 @@ function paint(){
       <td class="small muted">${esc((L.type||'').replace('FB — ','FB · '))}</td>
       <td><span class="tcount">${L.t.length}</span> <span class="small muted">(${L.human.length}👤 ${L.auto.length}🤖)</span></td>
       <td>${lastRes}</td><td class="small">${lastBy}</td>
-      <td><select class="status" data-id="${L.id}" onclick="event.stopPropagation()">
-        ${STATUSES.map(s=>`<option value="${s}" ${L.status===s?'selected':''}>${STATUS_LABEL[s]}</option>`).join('')}
+      <td><select class="status" data-id="${L.id}" data-cur="${L.status}" onclick="event.stopPropagation()">
+        ${(L.status==='archived'?['archived']:STATUSES).map(s=>`<option value="${s}" ${L.status===s?'selected':''}>${STATUS_LABEL[s]}</option>`).join('')}
       </select></td>`;
     tr.onclick = () => toggleDetail(L.id);
     tb.appendChild(tr);
     if(OPENID===L.id) tb.appendChild(detailRow(L));
   }
   tb.querySelectorAll('select.status').forEach(sel => sel.onchange = async e => {
-    const { error } = await db.from('leads').update({status:e.target.value}).eq('id', e.target.dataset.id);
-    error ? flash('Status update failed: '+error.message,false) : flash('Status updated.');
+    const newS = e.target.value, cur = e.target.dataset.cur, id = e.target.dataset.id;
+    const note = (prompt('NOTE REQUIRED to move to "'+(STATUS_LABEL[newS]||newS)+'" — what happened?')||'').trim();
+    if(!note){ e.target.value = cur; flash('Status NOT changed — a note is required.', false); return; }
+    let err = (await db.from('touches').insert({lead_id:id, touched_by:ME.email, by_name:ME.name, is_auto:false, note:'[Status → '+(STATUS_LABEL[newS]||newS)+'] '+note})).error;
+    if(!err) err = (await db.from('leads').update({status:newS}).eq('id', id)).error;
+    err ? (e.target.value=cur, flash('Status update failed: '+err.message,false)) : (flash('Status updated + note logged.'), loadAll());
   });
 }
 
@@ -257,7 +290,12 @@ function detailRow(L){
     <div class="chips">${chip('res','no_reply','No Reply','seln')}${chip('res','reply','Reply','sela')}${chip('res','successful','✅ Successful','selg')}</div>
     <input class="notein" id="touchNote" placeholder="Note (optional — what happened?)" onclick="event.stopPropagation()">
     <button class="btn btn-gold" onclick="event.stopPropagation();logTouch('${L.id}')">Log Touch</button>
-    <div class="remnote">⏳ ${L.human.length} of 8 human touches used${L.engaged?' · engaged (reply received — count paused)':''}. At 8 with no engagement → auto-flag Remarketing. Never deleted.</div>
+    <div class="remnote">⏳ ${L.human.length} of 8 human touches used${L.engaged?' · engaged (reply received — count paused)':''}. At 8 with no engagement → auto-flag Remarketing.</div>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+      ${L.status!=='archived' ? `<button class="btn btn-ghost" onclick="event.stopPropagation();archiveLead('${L.id}')">Archive lead</button>` : ''}
+      ${L.status==='archived' && ME.admin ? `<button class="btn btn-ghost" style="color:var(--bad);border-color:rgba(248,113,113,.4)" onclick="event.stopPropagation();deleteLead('${L.id}')">Delete permanently (admin)</button>` : ''}
+      ${L.status==='archived' && !ME.admin ? `<span class="small muted">Archived — only an admin can delete.</span>` : ''}
+    </div>
   </td>`;
   return tr;
 }
@@ -266,6 +304,7 @@ async function logTouch(id){
   if(!SEL.chan || !SEL.res){ flash('Pick a channel AND a result first.', false); return; }
   const L = LEADS.find(x=>x.id===id); if(!L) return;
   const note = ($('touchNote')?.value||'').trim();
+  if(!note){ flash('A NOTE IS REQUIRED — write what happened before logging the touch.', false); return; }
   const { error } = await db.from('touches').insert({
     lead_id:id, touched_by:ME.email, by_name:ME.name,
     is_auto:false, channel:SEL.chan, result:SEL.res, note
@@ -281,6 +320,23 @@ async function logTouch(id){
   await loadAll();
 }
 
+async function togglePin(tid, val){
+  const { error } = await db.from('touches').update({pinned:val}).eq('id', tid);
+  error ? flash('Pin failed: '+error.message,false) : loadAll();
+}
+async function archiveLead(id){
+  const note = (prompt('NOTE REQUIRED to archive — why is this lead being archived?')||'').trim();
+  if(!note){ flash('Not archived — a note is required.', false); return; }
+  let err = (await db.from('touches').insert({lead_id:id, touched_by:ME.email, by_name:ME.name, is_auto:false, note:'[Archived] '+note})).error;
+  if(!err) err = (await db.from('leads').update({status:'archived'}).eq('id',id)).error;
+  err ? flash('Archive failed: '+err.message,false) : (flash('Lead archived (recoverable — admins can delete permanently).'), loadAll());
+}
+async function deleteLead(id){
+  if(!ME.admin){ flash('Only admins can delete.', false); return; }
+  if(!confirm('PERMANENTLY delete this archived lead and its entire touch history? This cannot be undone.')) return;
+  const { error } = await db.from('leads').delete().eq('id', id);
+  error ? flash('Delete failed: '+error.message,false) : (flash('Lead permanently deleted.'), OPENID=null, loadAll());
+}
 async function loadRecipients(){
   const { data, error } = await db.from('notify_recipients').select('*').order('label');
   if(error || !data || !data.length){ $('notifyCard').style.display='none'; return; }
