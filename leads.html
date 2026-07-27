@@ -6,6 +6,9 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Leads — PCS Accounting Back End</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
   :root{
     --ink:#0b0d12; --panel:#12151d; --panel2:#171b25; --line:rgba(212,175,55,.18);
@@ -108,7 +111,12 @@
     </div>
 
     <div class="card">
-      <h2>Leads &amp; Applications <span class="muted small" id="count"></span> <button class="btn btn-ghost small" id="archBtn" style="display:none;float:right" onclick="SHOW_ARCHIVED.on=!SHOW_ARCHIVED.on;paint()">Show archived</button></h2>
+      <h2>Leads &amp; Applications <span class="muted small" id="count"></span> <button class="btn btn-ghost small" id="archBtn" style="display:none;float:right" onclick="SHOW_ARCHIVED.on=!SHOW_ARCHIVED.on;paint()">Show archived</button>
+      <span id="expBtns" style="display:none;float:right;margin-right:10px">
+        <button class="btn btn-ghost small" onclick="downloadCSV()">CSV</button>
+        <button class="btn btn-ghost small" onclick="downloadXLSX()">Excel</button>
+        <button class="btn btn-gold small" onclick="downloadPDF()">PDF</button>
+      </span></h2>
       <div class="note" style="margin:0 0 10px">Click a lead to see its touch history and log a touch.</div>
       <div class="tbl-scroll">
         <table id="leadsTbl">
@@ -141,15 +149,16 @@
         3b. Deleting: leads NEVER delete directly — Archive first (note required). Only an ADMIN can permanently delete an archived lead.<br>
         3c. The counter tracks HUMAN touches out of 8. If a lead replies, the count pauses (engaged). 8 human touches with no engagement → the lead auto-moves to REMARKETING. Leads are never deleted.<br>
         4. Statuses: New → Contacted → Show → Filed. Special: HOT, Duplicate, Management Review, Remarketing, Jail. Same ladder as the Giveaway board.<br>
-        5. To change who gets the emails: admins use "Where Leads Go" — no developer needed.<br>
-        6. Sign-in is your Gmail. If you can sign in but see nothing, an admin needs to approve your profile.
+        5. EXPORTS (CSV / Excel / PDF buttons) are ADMIN-ONLY — staff will not see them.<br>
+        6. To change who gets the emails: admins use "Where Leads Go" — no developer needed.<br>
+        7. Sign-in is your Gmail. If you can sign in but see nothing, an admin needs to approve your profile.
       </div>
     </div>
   </div>
 </div>
 
 <script>
-const BUILD_V = '2026-07-25-1'; // bumped every deploy together with version.json
+const BUILD_V = '2026-07-25-2'; // bumped every deploy together with version.json
 const SB_URL  = 'https://mxuenhsdknlevlytneku.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14dWVuaHNka25sZXZseXRuZWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMDAyNzMsImV4cCI6MjA5ODc3NjI3M30.5pNV45oYV17jGgtvcNaD-Tsnr9Kqll9SgNtRPsNwaBw';
 const db = supabase.createClient(SB_URL, SB_ANON);
@@ -234,7 +243,8 @@ function paint(){
   $('kWeek').textContent = LEADS.filter(L=>L.t.some(t=>new Date(t.created_at)>wk)).length;
   $('kEngaged').textContent = LEADS.filter(L=>L.engaged).length;
   $('kUntouched').textContent = LEADS.filter(L=>!L.t.length).length;
-  $('count').textContent = '— '+VIS.length+' shown'; const ab=$('archBtn'); if(ab){ab.textContent = SHOW_ARCHIVED.on? 'Hide archived' : 'Show archived ('+ARCH.length+')'; ab.style.display = ARCH.length||SHOW_ARCHIVED.on ? 'inline-block':'none';}
+  $('count').textContent = '— '+VIS.length+' shown'; const eb=$('expBtns'); if(eb) eb.style.display = ME.admin ? 'inline-block':'none';
+  const ab=$('archBtn'); if(ab){ab.textContent = SHOW_ARCHIVED.on? 'Hide archived' : 'Show archived ('+ARCH.length+')'; ab.style.display = ARCH.length||SHOW_ARCHIVED.on ? 'inline-block':'none';}
   $('emptyNote').style.display = VIS.length? 'none':'block';
   // rows
   const tb = $('leadsTbl').querySelector('tbody'); tb.innerHTML='';
@@ -319,6 +329,49 @@ async function logTouch(id){
   flash(msg);
   await loadAll();
 }
+
+// ---- exports (ADMIN ONLY — rule #13) ----
+function rowsForExport(){
+  const set = SHOW_ARCHIVED.on ? LEADS : LEADS.filter(l=>l.status!=='archived');
+  return set.map(L=>({
+    Date: new Date(L.created_at).toLocaleString('en-US'),
+    Name: L.name||'', Business: L.business||'',
+    Phone: L.phone||'', Email: L.email||'',
+    Type: L.type||'', Status: STATUS_LABEL[L.status]||L.status||'',
+    'Human Touches': (L.human||[]).length, 'Auto Touches': (L.auto||[]).length,
+    'Last Result': L.last ? (RES[L.last.result]?.[0]||'') : '',
+    'Last Touched By': L.last ? (L.last.is_auto?'Auto':(L.last.by_name||L.last.touched_by||'')) : '',
+    'Referred By': L.referred_by||'', Message: L.message||''
+  }));
+}
+const stamp = () => new Date().toISOString().slice(0,10);
+function gateExport(){ if(!ME.admin){ flash('Exports are ADMIN-ONLY.', false); return false; } return true; }
+function downloadCSV(){
+  if(!gateExport()) return;
+  const d=rowsForExport(); if(!d.length) return flash('No leads to export.',false);
+  const cols=Object.keys(d[0]);
+  const csv=[cols.join(',')].concat(d.map(r=>cols.map(c=>{const v=(''+(r[c]??'')).replace(/"/g,'""');return /[",
+]/.test(v)?`"${v}"`:v;}).join(','))).join('
+');
+  dl(URL.createObjectURL(new Blob([csv],{type:'text/csv'})),`pcs-accounting-leads-${stamp()}.csv`);
+}
+function downloadXLSX(){
+  if(!gateExport()) return;
+  const d=rowsForExport(); if(!d.length) return flash('No leads to export.',false);
+  const ws=XLSX.utils.json_to_sheet(d), wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'Leads'); XLSX.writeFile(wb,`pcs-accounting-leads-${stamp()}.xlsx`);
+}
+function downloadPDF(){
+  if(!gateExport()) return;
+  const d=rowsForExport(); if(!d.length) return flash('No leads to export.',false);
+  const { jsPDF }=window.jspdf, doc=new jsPDF({orientation:'landscape'});
+  doc.setFontSize(14); doc.text('PCS Accounting — Leads',14,15);
+  doc.setFontSize(9); doc.text(`${d.length} leads · ${stamp()}`,14,21);
+  const cols=Object.keys(d[0]);
+  doc.autoTable({startY:26,head:[cols],body:d.map(r=>cols.map(c=>''+(r[c]??''))),styles:{fontSize:6.5},headStyles:{fillColor:[26,20,8]}});
+  doc.save(`pcs-accounting-leads-${stamp()}.pdf`);
+}
+function dl(url,name){const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();}
 
 async function togglePin(tid, val){
   const { error } = await db.from('touches').update({pinned:val}).eq('id', tid);
