@@ -158,7 +158,7 @@
 </div>
 
 <script>
-const BUILD_V = '2026-07-25-2'; // bumped every deploy together with version.json
+const BUILD_V = '2026-07-27-3'; // bumped every deploy together with version.json
 const SB_URL  = 'https://mxuenhsdknlevlytneku.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14dWVuaHNka25sZXZseXRuZWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMDAyNzMsImV4cCI6MjA5ODc3NjI3M30.5pNV45oYV17jGgtvcNaD-Tsnr9Kqll9SgNtRPsNwaBw';
 const db = supabase.createClient(SB_URL, SB_ANON);
@@ -350,9 +350,8 @@ function downloadCSV(){
   if(!gateExport()) return;
   const d=rowsForExport(); if(!d.length) return flash('No leads to export.',false);
   const cols=Object.keys(d[0]);
-  const csv=[cols.join(',')].concat(d.map(r=>cols.map(c=>{const v=(''+(r[c]??'')).replace(/"/g,'""');return /[",
-]/.test(v)?`"${v}"`:v;}).join(','))).join('
-');
+  const NL=String.fromCharCode(10);
+  const csv=[cols.join(',')].concat(d.map(r=>cols.map(c=>{const v=(''+(r[c]??'')).replace(/"/g,'""');return (v.indexOf('"')>-1||v.indexOf(',')>-1||v.indexOf(NL)>-1)?'"'+v+'"':v;}).join(','))).join(NL);
   dl(URL.createObjectURL(new Blob([csv],{type:'text/csv'})),`pcs-accounting-leads-${stamp()}.csv`);
 }
 function downloadXLSX(){
