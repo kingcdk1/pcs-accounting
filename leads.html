@@ -159,7 +159,7 @@
 </div>
 
 <script>
-const BUILD_V = '2026-07-27-5'; // bumped every deploy together with version.json
+const BUILD_V = '2026-07-27-6'; // bumped every deploy together with version.json
 const SB_URL  = 'https://mxuenhsdknlevlytneku.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14dWVuaHNka25sZXZseXRuZWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMDAyNzMsImV4cCI6MjA5ODc3NjI3M30.5pNV45oYV17jGgtvcNaD-Tsnr9Kqll9SgNtRPsNwaBw';
 const db = supabase.createClient(SB_URL, SB_ANON);
@@ -218,17 +218,22 @@ async function loadAll(){ await loadLeads(); await loadTouches(); paint(); loadR
 
 // ---- LIVE NEW-LEAD ALERTS (rule #14): every new lead = sound + flash, board refreshes itself ----
 let NEWEST = null;
+const ANTHEM = new Audio('anthem.mp3'); ANTHEM.volume = 0.7; // PCS Tax Fam Anthem = the new-lead sound
 function chime(){
   try{
+    ANTHEM.currentTime = 0;
+    ANTHEM.play().catch(()=>beep()); // browser blocked audio (no click yet) -> fallback beep attempt
+  }catch(e){ beep(); }
+}
+function beep(){
+  try{
     const ctx = new (window.AudioContext||window.webkitAudioContext)();
-    [[880,0],[1174.66,0.18]].forEach(([f,t])=>{
-      const o=ctx.createOscillator(), g=ctx.createGain();
-      o.type='sine'; o.frequency.value=f; o.connect(g); g.connect(ctx.destination);
-      g.gain.setValueAtTime(0.001, ctx.currentTime+t);
-      g.gain.exponentialRampToValueAtTime(0.3, ctx.currentTime+t+0.02);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+t+0.5);
-      o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+0.55);
-    });
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.type='sine'; o.frequency.value=880; o.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(0.001, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.3, ctx.currentTime+0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.5);
+    o.start(); o.stop(ctx.currentTime+0.55);
   }catch(e){}
 }
 async function checkNewLeads(){
