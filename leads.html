@@ -160,7 +160,7 @@
 </div>
 
 <script>
-const BUILD_V = '2026-07-27-8'; // bumped every deploy together with version.json
+const BUILD_V = '2026-07-30-1'; // bumped every deploy together with version.json
 const SB_URL  = 'https://mxuenhsdknlevlytneku.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14dWVuaHNka25sZXZseXRuZWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMDAyNzMsImV4cCI6MjA5ODc3NjI3M30.5pNV45oYV17jGgtvcNaD-Tsnr9Kqll9SgNtRPsNwaBw';
 const db = supabase.createClient(SB_URL, SB_ANON);
@@ -207,7 +207,7 @@ db.auth.getSession().then(({data}) => render(data.session));
 async function render(session){
   if(!session){ $('gate').style.display='block'; $('app').style.display='none'; $('outBtn').style.display='none'; $('refreshBtn').style.display='none'; $('who').textContent=''; return; }
   $('gate').style.display='none'; $('app').style.display='block';
-  $('outBtn').style.display='inline-block'; $('refreshBtn').style.display='inline-block'; sndUI();
+  $('outBtn').style.display='inline-block'; $('refreshBtn').style.display='inline-block'; sndUI(); var sf=document.getElementById('sugFab'); if(sf) sf.style.display='block';
   ME.email = session.user.email;
   ME.name  = session.user.user_metadata?.full_name || session.user.email.split('@')[0];
   $('who').textContent = ME.email;
@@ -321,9 +321,11 @@ function paint(){
     const newS = e.target.value, cur = e.target.dataset.cur, id = e.target.dataset.id;
     const note = (prompt('NOTE REQUIRED to move to "'+(STATUS_LABEL[newS]||newS)+'" — what happened?')||'').trim();
     if(!note){ e.target.value = cur; flash('Status NOT changed — a note is required.', false); return; }
-    let err = (await db.from('touches').insert({lead_id:id, touched_by:ME.email, by_name:ME.name, is_auto:false, note:'[Status → '+(STATUS_LABEL[newS]||newS)+'] '+note})).error;
+    const ins = await db.from('touches').insert({lead_id:id, touched_by:ME.email, by_name:ME.name, is_auto:false, note:'[Status → '+(STATUS_LABEL[newS]||newS)+'] '+note}).select();
+    let err = ins.error;
     if(!err) err = (await db.from('leads').update({status:newS}).eq('id', id)).error;
-    err ? (e.target.value=cur, flash('Status update failed: '+err.message,false)) : (flash('Status updated + note logged.'), loadAll());
+    if(err){ e.target.value=cur; flash('Status update failed: '+err.message,false); }
+    else{ const L=LEADS.find(x=>x.id===id); if(L) L.status=newS; if(ins.data&&ins.data[0]) TOUCHES.unshift(ins.data[0]); flash('Status updated + note logged.'); paint(); }
   });
 }
 
@@ -366,19 +368,21 @@ async function logTouch(id){
   const L = LEADS.find(x=>x.id===id); if(!L) return;
   const note = ($('touchNote')?.value||'').trim();
   if(!note){ flash('A NOTE IS REQUIRED — write what happened before logging the touch.', false); return; }
-  const { error } = await db.from('touches').insert({
+  const ins = await db.from('touches').insert({
     lead_id:id, touched_by:ME.email, by_name:ME.name,
     is_auto:false, channel:SEL.chan, result:SEL.res, note
-  });
-  if(error){ flash('Touch failed: '+error.message, false); return; }
+  }).select();
+  if(ins.error){ flash('Touch failed: '+ins.error.message, false); return; }
+  if(ins.data&&ins.data[0]) TOUCHES.unshift(ins.data[0]);
   let msg='Touch logged.';
   if(SEL.res==='no_reply' && !L.engaged && L.human.length+1>=8){
     await db.from('leads').update({status:'remarketing'}).eq('id',id);
+    L.status='remarketing';
     msg='Touch logged — 8 human touches, no engagement → moved to REMARKETING.';
   }
   SEL={chan:null,res:null};
   flash(msg);
-  await loadAll();
+  paint();
 }
 
 // ---- exports (ADMIN ONLY — rule #13) ----
@@ -425,21 +429,47 @@ function dl(url,name){const a=document.createElement('a');a.href=url;a.download=
 
 async function togglePin(tid, val){
   const { error } = await db.from('touches').update({pinned:val}).eq('id', tid);
-  error ? flash('Pin failed: '+error.message,false) : loadAll();
+  if(error) return flash('Pin failed: '+error.message,false);
+  const t=TOUCHES.find(x=>x.id===tid); if(t) t.pinned=val; paint();
 }
 async function archiveLead(id){
   const note = (prompt('NOTE REQUIRED to archive — why is this lead being archived?')||'').trim();
   if(!note){ flash('Not archived — a note is required.', false); return; }
-  let err = (await db.from('touches').insert({lead_id:id, touched_by:ME.email, by_name:ME.name, is_auto:false, note:'[Archived] '+note})).error;
+  const ins = await db.from('touches').insert({lead_id:id, touched_by:ME.email, by_name:ME.name, is_auto:false, note:'[Archived] '+note}).select();
+  let err = ins.error;
   if(!err) err = (await db.from('leads').update({status:'archived'}).eq('id',id)).error;
-  err ? flash('Archive failed: '+err.message,false) : (flash('Lead archived (recoverable — admins can delete permanently).'), loadAll());
+  if(err) flash('Archive failed: '+err.message,false);
+  else{ const L=LEADS.find(x=>x.id===id); if(L) L.status='archived'; if(ins.data&&ins.data[0]) TOUCHES.unshift(ins.data[0]); flash('Lead archived (recoverable — admins can delete permanently).'); paint(); }
 }
 async function deleteLead(id){
   if(!ME.admin){ flash('Only admins can delete.', false); return; }
   if(!confirm('PERMANENTLY delete this archived lead and its entire touch history? This cannot be undone.')) return;
   const { error } = await db.from('leads').delete().eq('id', id);
-  error ? flash('Delete failed: '+error.message,false) : (flash('Lead permanently deleted.'), OPENID=null, loadAll());
+  if(error) return flash('Delete failed: '+error.message,false);
+  LEADS = LEADS.filter(x=>x.id!==id); TOUCHES = TOUCHES.filter(t=>t.lead_id!==id); OPENID=null;
+  flash('Lead permanently deleted.'); paint();
 }
+async function sendSuggestion(){
+  const t = document.getElementById('sugText').value.trim();
+  if(!t){ flash('Write the suggestion first.', false); return; }
+  try{
+    const r = await fetch('https://pcs-accounting-api.vercel.app/api/suggest',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ text:t, user: ME.name+' <'+ME.email+'>' })
+    });
+    if(!r.ok) throw new Error('send failed');
+    document.getElementById('sugText').value='';
+    document.getElementById('sugPanel').style.display='none';
+    document.getElementById('sugFab').style.display='block';
+    flash('💡 Suggestion sent to Cyrus. Thank you!');
+  }catch(e){ flash('Could not send — try again.', false); }
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var f=document.getElementById('sugFab'), pnl=document.getElementById('sugPanel');
+  if(f) f.onclick=function(){ pnl.style.display='block'; f.style.display='none'; };
+  var c=document.getElementById('sugClose'); if(c) c.onclick=function(){ pnl.style.display='none'; f.style.display='block'; };
+  var sd=document.getElementById('sugSend'); if(sd) sd.onclick=sendSuggestion;
+});
 async function loadRecipients(){
   const { data, error } = await db.from('notify_recipients').select('*').order('label');
   if(error || !data || !data.length){ $('notifyCard').style.display='none'; return; }
@@ -472,5 +502,14 @@ $('addBtn').onclick = async () => {
   error ? flash('Add failed: '+error.message,false) : (flash('Added — toggled ON.'), $('newLbl').value='', $('newEml').value='', loadRecipients());
 };
 </script>
+<div id="sugFab" style="position:fixed;bottom:22px;right:22px;z-index:900;background:linear-gradient(135deg,#d4af37,#e8ce7a);color:#1a1408;font-weight:700;padding:12px 18px;border-radius:99px;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.5);display:none">💡 Suggestion</div>
+<div id="sugPanel" style="position:fixed;bottom:22px;right:22px;z-index:901;background:var(--panel);border:1px solid var(--gold);border-radius:14px;padding:16px;width:320px;max-width:92vw;display:none">
+  <div style="color:var(--gold-soft);font-weight:700;margin-bottom:8px">💡 Suggestion → goes straight to Cyrus</div>
+  <textarea id="sugText" rows="4" style="width:100%;background:var(--ink);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px" placeholder="What should we improve or add?"></textarea>
+  <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
+    <button class="btn btn-ghost" id="sugClose">Close</button>
+    <button class="btn btn-gold" id="sugSend">Send</button>
+  </div>
+</div>
 </body>
 </html>
