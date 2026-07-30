@@ -141,6 +141,12 @@
       <div class="note">Toggle OFF = stays saved, stops receiving. Only admins see this panel. Changes save instantly to the database; the email sender reads this list (interim: also mirrored in the server setting until the final cutover).</div>
     </div>
 
+    <div class="card" id="sugCard" style="display:none">
+      <h2>Suggestions &amp; Issues <span class="muted small" id="sugCount"></span></h2>
+      <div id="sugList"></div>
+      <div class="note">Submitted with the 💡 button (bottom right). Lifecycle: OPEN → ACKNOWLEDGED (admin/dev) → FIXED (stays listed 7 days, then disappears). Nothing is ever deleted from the database.</div>
+    </div>
+
     <div class="card">
       <h2>Instructions &amp; Training</h2>
       <div class="note">
@@ -151,6 +157,7 @@
         3c. The counter tracks HUMAN touches out of 8. If a lead replies, the count pauses (engaged). 8 human touches with no engagement → the lead auto-moves to REMARKETING. Leads are never deleted.<br>
         4. Statuses: New → Contacted → Show → Filed. Special: HOT, Duplicate, Management Review, Remarketing, Jail. Same ladder as the Giveaway board.<br>
         5. EXPORTS (CSV / Excel / PDF buttons) are ADMIN-ONLY — staff will not see them.<br>
+        5b. SUGGESTIONS &amp; ISSUES: tap the 💡 button (bottom right) to report anything wrong or ideas — your name and time are stamped automatically. Admins/devs Acknowledge, then Mark Fixed; fixed items stay listed 7 days.<br>
         6. To change who gets the emails: admins use "Where Leads Go" — no developer needed.<br>
         7. NEW-LEAD SOUND: while the board is open it checks for new leads every 30 seconds - a chime + banner fires the moment one lands (browser may stay silent until your first click on the page).<br>
         8. Sign-in is your Gmail. If you can sign in but see nothing, an admin needs to approve your profile.
@@ -160,7 +167,7 @@
 </div>
 
 <script>
-const BUILD_V = '2026-07-30-1'; // bumped every deploy together with version.json
+const BUILD_V = '2026-07-30-2'; // bumped every deploy together with version.json
 const SB_URL  = 'https://mxuenhsdknlevlytneku.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14dWVuaHNka25sZXZseXRuZWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMDAyNzMsImV4cCI6MjA5ODc3NjI3M30.5pNV45oYV17jGgtvcNaD-Tsnr9Kqll9SgNtRPsNwaBw';
 const db = supabase.createClient(SB_URL, SB_ANON);
@@ -215,7 +222,7 @@ async function render(session){
   loadAll();
 }
 
-async function loadAll(){ await loadLeads(); await loadTouches(); paint(); loadRecipients(); if(LEADS.length) NEWEST = LEADS[0].created_at; }
+async function loadAll(){ await loadLeads(); await loadTouches(); paint(); loadRecipients(); loadSugs(); if(LEADS.length) NEWEST = LEADS[0].created_at; }
 
 // ---- LIVE NEW-LEAD ALERTS (rule #14): every new lead = sound + flash, board refreshes itself ----
 let NEWEST = null;
@@ -452,17 +459,60 @@ async function deleteLead(id){
 async function sendSuggestion(){
   const t = document.getElementById('sugText').value.trim();
   if(!t){ flash('Write the suggestion first.', false); return; }
+  const ins = await db.from('suggestions').insert({ text:t, by_name:ME.name, by_email:ME.email }).select();
+  if(ins.error){ flash('Could not save: '+ins.error.message, false); return; }
+  if(ins.data && ins.data[0]) SUGS.unshift(ins.data[0]);
   try{
-    const r = await fetch('https://pcs-accounting-api.vercel.app/api/suggest',{
+    fetch('https://pcs-accounting-api.vercel.app/api/suggest',{
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ text:t, user: ME.name+' <'+ME.email+'>' })
     });
-    if(!r.ok) throw new Error('send failed');
-    document.getElementById('sugText').value='';
-    document.getElementById('sugPanel').style.display='none';
-    document.getElementById('sugFab').style.display='block';
-    flash('💡 Suggestion sent to Cyrus. Thank you!');
-  }catch(e){ flash('Could not send — try again.', false); }
+  }catch(e){}
+  document.getElementById('sugText').value='';
+  document.getElementById('sugPanel').style.display='none';
+  document.getElementById('sugFab').style.display='block';
+  flash('💡 Logged + sent to Cyrus. Thank you!');
+  paintSugs();
+}
+
+let SUGS = [];
+async function loadSugs(){
+  try{
+    const { data } = await db.from('suggestions').select('*').order('created_at',{ascending:false}).limit(200);
+    SUGS = data || [];
+  }catch(e){ SUGS = []; }
+  paintSugs();
+}
+function paintSugs(){
+  const card = document.getElementById('sugCard'), list = document.getElementById('sugList');
+  if(!card || !list) return;
+  const cutoff = Date.now() - 7*864e5;
+  const vis = SUGS.filter(x => x.status !== 'fixed' || (x.fixed_at && new Date(x.fixed_at).getTime() > cutoff));
+  card.style.display = vis.length ? 'block' : 'none';
+  document.getElementById('sugCount').textContent = '— ' + vis.filter(x=>x.status==='open').length + ' open';
+  list.innerHTML = vis.map(x => {
+    const when = new Date(x.created_at).toLocaleString('en-US',{month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit'});
+    const st = x.status==='open' ? '<span class="pill" style="background:rgba(248,113,113,.15);color:var(--bad)">OPEN</span>'
+      : x.status==='acknowledged' ? '<span class="pill" style="background:rgba(251,191,36,.15);color:var(--warn)">ACKNOWLEDGED — '+esc(x.acknowledged_by||'')+'</span>'
+      : '<span class="pill" style="background:rgba(52,211,153,.15);color:var(--ok)">FIXED — '+esc(x.fixed_by||'')+'</span>';
+    const btn = !ME.admin ? '' :
+      x.status==='open' ? '<button class="chip" onclick="sugStatus(&quot;'+x.id+'&quot;,&quot;acknowledged&quot;)">Acknowledge</button>'
+      : x.status==='acknowledged' ? '<button class="chip selg" onclick="sugStatus(&quot;'+x.id+'&quot;,&quot;fixed&quot;)">Mark Fixed</button>' : '';
+    return '<div class="t" style="display:flex;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:12.5px;flex-wrap:wrap">'
+      + '<span class="muted small">'+when+'</span><strong>'+esc(x.by_name||x.by_email||'')+'</strong>'
+      + '<span style="flex:1;min-width:180px">'+esc(x.text)+'</span>'+st+btn+'</div>';
+  }).join('');
+}
+async function sugStatus(id, st){
+  if(!ME.admin){ flash('Admin only.', false); return; }
+  const upd = st==='acknowledged'
+    ? { status:'acknowledged', acknowledged_by: ME.name, acknowledged_at: new Date().toISOString() }
+    : { status:'fixed', fixed_by: ME.name, fixed_at: new Date().toISOString() };
+  const { error } = await db.from('suggestions').update(upd).eq('id', id);
+  if(error){ flash('Update failed: '+error.message, false); return; }
+  const x = SUGS.find(y=>y.id===id); if(x) Object.assign(x, upd);
+  flash(st==='acknowledged' ? 'Acknowledged.' : 'Marked FIXED — visible 7 more days.');
+  paintSugs();
 }
 document.addEventListener('DOMContentLoaded', function(){
   var f=document.getElementById('sugFab'), pnl=document.getElementById('sugPanel');
