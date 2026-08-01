@@ -90,6 +90,7 @@
       <a href="index.html" class="btn btn-ghost">&larr; Site</a>
       <span class="who" id="who"></span>
       <button class="btn btn-ghost" id="sndBtn" style="display:none" onclick="unlockAudio(true)">🔇 Sound: tap to enable</button>
+      <button class="btn btn-ghost" id="briefBtn" style="display:none">Briefing</button>
       <button class="btn btn-ghost" id="refreshBtn" style="display:none">Refresh</button>
       <button class="btn btn-ghost" id="outBtn" style="display:none">Sign out</button>
     </div>
@@ -167,7 +168,7 @@
 </div>
 
 <script>
-const BUILD_V = '2026-07-30-2'; // bumped every deploy together with version.json
+const BUILD_V = '2026-07-30-3'; // bumped every deploy together with version.json
 const SB_URL  = 'https://mxuenhsdknlevlytneku.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14dWVuaHNka25sZXZseXRuZWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMDAyNzMsImV4cCI6MjA5ODc3NjI3M30.5pNV45oYV17jGgtvcNaD-Tsnr9Kqll9SgNtRPsNwaBw';
 const db = supabase.createClient(SB_URL, SB_ANON);
@@ -208,13 +209,37 @@ setInterval(checkVersion, 5*60*1000);
 window.addEventListener('focus', checkVersion);
 checkVersion();
 
+$('briefBtn') && ($('briefBtn').onclick = async () => {
+  flash('Loading briefing\u2026');
+  try{
+    const { data } = await db.auth.getSession();
+    const r = await fetch('https://pcs-accounting-api.vercel.app/api/briefing?preview=1', {
+      headers: { Authorization: 'Bearer ' + (data.session ? data.session.access_token : '') }
+    });
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const txt = await r.text();
+    let m = document.getElementById('briefModal');
+    if(!m){
+      m = document.createElement('div'); m.id='briefModal';
+      m.style.cssText='position:fixed;inset:0;z-index:950;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;padding:20px';
+      m.innerHTML = '<div style="background:var(--panel);border:1px solid var(--gold);border-radius:14px;max-width:640px;width:100%;max-height:84vh;overflow:auto;padding:20px">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><strong style="color:var(--gold-soft)">\u2600\ufe0f Today\u2019s Briefing</strong>'
+        + '<button class="btn btn-ghost" onclick="document.getElementById(\'briefModal\').remove()">Close</button></div>'
+        + '<pre id="briefText" style="white-space:pre-wrap;font-size:12.5px;line-height:1.5;color:var(--text)"></pre></div>';
+      document.body.appendChild(m);
+    }
+    document.getElementById('briefText').textContent = txt;
+    m.style.display='flex';
+  }catch(e){ flash('Briefing unavailable: '+e.message, false); }
+});
+
 db.auth.onAuthStateChange((_e, session) => render(session));
 db.auth.getSession().then(({data}) => render(data.session));
 
 async function render(session){
   if(!session){ $('gate').style.display='block'; $('app').style.display='none'; $('outBtn').style.display='none'; $('refreshBtn').style.display='none'; $('who').textContent=''; return; }
   $('gate').style.display='none'; $('app').style.display='block';
-  $('outBtn').style.display='inline-block'; $('refreshBtn').style.display='inline-block'; sndUI(); var sf=document.getElementById('sugFab'); if(sf) sf.style.display='block';
+  $('outBtn').style.display='inline-block'; $('refreshBtn').style.display='inline-block'; $('briefBtn').style.display='inline-block'; sndUI(); var sf=document.getElementById('sugFab'); if(sf) sf.style.display='block';
   ME.email = session.user.email;
   ME.name  = session.user.user_metadata?.full_name || session.user.email.split('@')[0];
   $('who').textContent = ME.email;
