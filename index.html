@@ -1134,6 +1134,7 @@ function handleSubmit(e, formType) {
     email: d.email || '',
     message: '',
     fields: {
+      via: (window.pcsRefVia ? window.pcsRefVia() : ''),
       referredBy: d.referredBy || '',
       hearAbout: d.hearAbout || '',
       businessName: d.bizName || '',
@@ -1252,7 +1253,14 @@ window.addEventListener('scroll', function() {
   var m = location.search.match(/[?&]ref=([^&]+)/i);
   var stored = null; try { stored = localStorage.getItem('pcs_ref'); } catch(e){}
   applyRef(m ? m[1] : stored);
+  // rule #16: remember HOW the referral arrived (QR scan vs shared link), first-touch
+  var v = location.search.match(/[?&]via=([^&]+)/i);
+  try {
+    if (v) localStorage.setItem('pcs_ref_via', decodeURIComponent(v[1]).toLowerCase());
+    else if (m && !localStorage.getItem('pcs_ref_via')) localStorage.setItem('pcs_ref_via', 'link');
+  } catch(e){}
 })();
+window.pcsRefVia = function(){ try { return localStorage.getItem('pcs_ref_via') || ''; } catch(e){ return ''; } };
 </script>
 
 <!--

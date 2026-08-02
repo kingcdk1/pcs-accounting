@@ -169,7 +169,7 @@
 </div>
 
 <script>
-const BUILD_V = '2026-08-02-1'; // bumped every deploy together with version.json
+const BUILD_V = '2026-08-02-2'; // bumped every deploy together with version.json
 const SB_URL  = 'https://mxuenhsdknlevlytneku.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14dWVuaHNka25sZXZseXRuZWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMDAyNzMsImV4cCI6MjA5ODc3NjI3M30.5pNV45oYV17jGgtvcNaD-Tsnr9Kqll9SgNtRPsNwaBw';
 const db = supabase.createClient(SB_URL, SB_ANON);
@@ -329,26 +329,30 @@ function sourceLabel(L){
   var type = (L.type||'').toLowerCase();
   var hear = (L.hear||'').toLowerCase();
   var src  = (L.source||'').toLowerCase();
-  var via  = ((L.payload && L.payload.via) || '').toLowerCase();
-  var ref  = refName(L.referred_by);
-  if(ref){
-    var how = via === 'qr' ? 'QR code' : 'referral link';
-    return { icon:'🔗', text:'Referral (' + how + ') - ' + ref, cls:'oc-g' };
-  }
-  if(type.indexOf('fb')===0 || type.indexOf('facebook')>-1 || hear.indexOf('facebook')>-1 || hear.indexOf('instagram')>-1){
+  var f    = (L.payload && L.payload.fields) || {};
+  var via  = ((f.via || (L.payload && L.payload.via) || '')+'').toLowerCase();
+  // 1) CHANNEL - how they physically arrived
+  var ch;
+  if(type.indexOf('booking')>-1 || type.indexOf('appointment')>-1 || hear.indexOf('booking')>-1 || hear.indexOf('calendly')>-1){
+    ch = { icon:'📅', text:'Calendar booking', cls:'oc-a' };
+  } else if(type.indexOf('fb')===0 || type.indexOf('facebook')>-1 || hear.indexOf('facebook')>-1 || hear.indexOf('instagram')>-1){
     var form = (L.type||'').replace(/^FB\s*.\s*/i,'');
     if(/^facebook-lead$/i.test(form)) form='';
-    return { icon:'📘', text:'Facebook/IG ad' + (form ? ' - ' + form : ''), cls:'oc-a' };
+    ch = { icon:'📘', text:'Facebook/IG' + (form ? ' - ' + form : ''), cls:'oc-a' };
+  } else if(src && src.indexOf('accounting.pcstaxservice.com')===-1 && src.indexOf('http')===0){
+    ch = { icon:'🏷', text:'Landing page - ' + src.replace(/^https?:\/\//,'').split('/')[0], cls:'oc-n' };
+  } else if(hear.indexOf('google')>-1){
+    ch = { icon:'🔍', text:'Google', cls:'oc-n' };
+  } else {
+    ch = { icon:'🌐', text:'Website' + (type && type!=='consultation' ? ' - ' + type.replace(/-/g,' ') : ''), cls:'oc-n' };
   }
-  if(type.indexOf('booking')>-1 || type.indexOf('appointment')>-1 || hear.indexOf('booking')>-1){
-    return { icon:'📅', text:'Calendar booking', cls:'oc-a' };
-  }
-  if(src && src.indexOf('accounting.pcstaxservice.com')===-1 && src.indexOf('http')===0){
-    return { icon:'🏷', text:'Landing page - ' + src.replace(/^https?:\/\//,'').split('/')[0], cls:'oc-n' };
-  }
-  if(hear.indexOf('google')>-1) return { icon:'🔍', text:'Google', cls:'oc-n' };
-  var nice = type ? type.replace(/-/g,' ') : 'form';
-  return { icon:'🌐', text:'Website - ' + nice, cls:'oc-n' };
+  // 2) REFERRAL OVERLAY - rides on top of whatever channel (giveaway model, same vocabulary)
+  var rn = refName(L.referred_by);
+  ch.ref  = rn;
+  ch.refIcon = via.indexOf('qr')>-1 ? '📱' : '👥';
+  ch.refText = rn ? ((via.indexOf('qr')>-1 ? 'QR' : 'Ref') + ' - ' + rn) : '';
+  ch.full = L.referred_by || '';
+  return ch;
 }
 
 function paint(){
@@ -375,7 +379,7 @@ function paint(){
     tr.innerHTML = `<td class="small muted">${when}</td>
       <td><strong>${esc(L.name)||'—'}</strong><div class="small muted">${esc(L.business)||''}</div></td>
       <td class="small">${esc(L.email)||''}<br>${esc(L.phone)||''}</td>
-      <td class="small"><span class="${SRC.cls}">${SRC.icon} ${esc(SRC.text)}</span></td>
+      <td class="small"><span class="${SRC.cls}">${SRC.icon} ${esc(SRC.text)}</span>${SRC.ref?`<div class="small oc-g" title="${esc(SRC.full)}">${SRC.refIcon} ${esc(SRC.refText)}</div>`:''}</td>
       <td><span class="tcount">${L.t.length}</span> <span class="small muted">(${L.human.length}👤 ${L.auto.length}🤖)</span></td>
       <td>${lastRes}</td><td class="small">${lastBy}</td>
       <td><select class="status" data-id="${L.id}" data-cur="${L.status}" onclick="event.stopPropagation()">
@@ -460,11 +464,11 @@ function rowsForExport(){
     Date: new Date(L.created_at).toLocaleString('en-US'),
     Name: L.name||'', Business: L.business||'',
     Phone: L.phone||'', Email: L.email||'',
-    'Came From': sourceLabel(L).text, Type: L.type||'', Status: STATUS_LABEL[L.status]||L.status||'',
+    'Came From': sourceLabel(L).text, 'Referral Type': (sourceLabel(L).refText? (sourceLabel(L).refIcon==='\u{1F4F1}'?'QR code':'Referral link'):''), Type: L.type||'', Status: STATUS_LABEL[L.status]||L.status||'',
     'Human Touches': (L.human||[]).length, 'Auto Touches': (L.auto||[]).length,
     'Last Result': L.last ? (RES[L.last.result]?.[0]||'') : '',
     'Last Touched By': L.last ? (L.last.is_auto?'Auto':(L.last.by_name||L.last.touched_by||'')) : '',
-    'Referred By': refName(L.referred_by), Message: L.message||''
+    'Referred By': refName(L.referred_by), 'Referred By (full)': L.referred_by||'', Message: L.message||''
   }));
 }
 const stamp = () => new Date().toISOString().slice(0,10);
