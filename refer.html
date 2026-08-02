@@ -139,6 +139,7 @@ footer{text-align:center;padding:26px 20px;border-top:1px solid var(--border-sof
     var base=(baseEl.value||'').trim() || 'https://accounting.pcstaxservice.com/';
     if(base.indexOf('?')===-1 && base.slice(-1)!=='/') base+='/';
     var link = name ? base + (base.indexOf('?')>-1?'&':'?') + 'ref=' + encodeURIComponent(name) : base;
+    var qrLink = name ? link + '&via=qr' : link;  // rule #16: QR scans distinguishable from shared links
     linkEl.value=link;
     box.innerHTML='';
     if(typeof QRCode!=='undefined'){

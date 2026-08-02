@@ -123,7 +123,7 @@
       <div class="tbl-scroll">
         <table id="leadsTbl">
           <thead><tr>
-            <th>When</th><th>Name</th><th>Contact</th><th>Type</th><th>Touches</th><th>Last Result</th><th>Last By</th><th>Status</th>
+            <th>When</th><th>Name</th><th>Contact</th><th>Came From</th><th>Touches</th><th>Last Result</th><th>Last By</th><th>Status</th>
           </tr></thead>
           <tbody></tbody>
         </table>
@@ -158,6 +158,7 @@
         3c. The counter tracks HUMAN touches out of 8. If a lead replies, the count pauses (engaged). 8 human touches with no engagement → the lead auto-moves to REMARKETING. Leads are never deleted.<br>
         4. Statuses: New → Contacted → Show → Filed. Special: HOT, Duplicate, Management Review, Remarketing, Jail. Same ladder as the Giveaway board.<br>
         5. EXPORTS (CSV / Excel / PDF buttons) are ADMIN-ONLY — staff will not see them.<br>
+        5a. CAME FROM: every lead shows how it arrived - Website form, Landing page, Facebook/IG ad, Calendar booking, or Referral (QR code / referral link) with the referrer name (first name + last initial).<br>
         5b. SUGGESTIONS &amp; ISSUES: tap the 💡 button (bottom right) to report anything wrong or ideas — your name and time are stamped automatically. Admins/devs Acknowledge, then Mark Fixed; fixed items stay listed 7 days.<br>
         6. To change who gets the emails: admins use "Where Leads Go" — no developer needed.<br>
         7. NEW-LEAD SOUND: while the board is open it checks for new leads every 30 seconds - a chime + banner fires the moment one lands (browser may stay silent until your first click on the page).<br>
@@ -168,7 +169,7 @@
 </div>
 
 <script>
-const BUILD_V = '2026-07-30-3'; // bumped every deploy together with version.json
+const BUILD_V = '2026-08-02-1'; // bumped every deploy together with version.json
 const SB_URL  = 'https://mxuenhsdknlevlytneku.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14dWVuaHNka25sZXZseXRuZWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMDAyNzMsImV4cCI6MjA5ODc3NjI3M30.5pNV45oYV17jGgtvcNaD-Tsnr9Kqll9SgNtRPsNwaBw';
 const db = supabase.createClient(SB_URL, SB_ANON);
@@ -316,6 +317,40 @@ function annotate(L){
   L.last = L.t[0]||null;
 }
 
+// ---- ATTRIBUTION (rule #16): how the lead arrived + who referred (First L.) ----
+function refName(full){
+  var t = (full||'').toString().trim();
+  if(!t) return '';
+  var parts = t.split(/\s+/);
+  if(parts.length === 1) return parts[0];
+  return parts[0] + ' ' + parts[parts.length-1].charAt(0).toUpperCase() + '.';
+}
+function sourceLabel(L){
+  var type = (L.type||'').toLowerCase();
+  var hear = (L.hear||'').toLowerCase();
+  var src  = (L.source||'').toLowerCase();
+  var via  = ((L.payload && L.payload.via) || '').toLowerCase();
+  var ref  = refName(L.referred_by);
+  if(ref){
+    var how = via === 'qr' ? 'QR code' : 'referral link';
+    return { icon:'🔗', text:'Referral (' + how + ') - ' + ref, cls:'oc-g' };
+  }
+  if(type.indexOf('fb')===0 || type.indexOf('facebook')>-1 || hear.indexOf('facebook')>-1 || hear.indexOf('instagram')>-1){
+    var form = (L.type||'').replace(/^FB\s*.\s*/i,'');
+    if(/^facebook-lead$/i.test(form)) form='';
+    return { icon:'📘', text:'Facebook/IG ad' + (form ? ' - ' + form : ''), cls:'oc-a' };
+  }
+  if(type.indexOf('booking')>-1 || type.indexOf('appointment')>-1 || hear.indexOf('booking')>-1){
+    return { icon:'📅', text:'Calendar booking', cls:'oc-a' };
+  }
+  if(src && src.indexOf('accounting.pcstaxservice.com')===-1 && src.indexOf('http')===0){
+    return { icon:'🏷', text:'Landing page - ' + src.replace(/^https?:\/\//,'').split('/')[0], cls:'oc-n' };
+  }
+  if(hear.indexOf('google')>-1) return { icon:'🔍', text:'Google', cls:'oc-n' };
+  var nice = type ? type.replace(/-/g,' ') : 'form';
+  return { icon:'🌐', text:'Website - ' + nice, cls:'oc-n' };
+}
+
 function paint(){
   LEADS.forEach(annotate);
   const ARCH = LEADS.filter(L=>L.status==='archived');
@@ -335,11 +370,12 @@ function paint(){
     const when = new Date(L.created_at).toLocaleString('en-US',{month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit'});
     const lastRes = L.last ? `<span class="${RES[L.last.result]?.[1]||'oc-n'}">${RES[L.last.result]?.[0]||'—'}</span>` : '<span class="oc-n">—</span>';
     const lastBy  = L.last ? (L.last.is_auto? '<span class="badge-auto">🤖 Auto</span>' : esc(L.last.by_name||L.last.touched_by||'')) : '<span class="muted">—</span>';
+    const SRC = sourceLabel(L);
     const tr = document.createElement('tr'); tr.className='leadrow'; tr.dataset.id=L.id;
     tr.innerHTML = `<td class="small muted">${when}</td>
       <td><strong>${esc(L.name)||'—'}</strong><div class="small muted">${esc(L.business)||''}</div></td>
       <td class="small">${esc(L.email)||''}<br>${esc(L.phone)||''}</td>
-      <td class="small muted">${esc((L.type||'').replace('FB — ','FB · '))}</td>
+      <td class="small"><span class="${SRC.cls}">${SRC.icon} ${esc(SRC.text)}</span></td>
       <td><span class="tcount">${L.t.length}</span> <span class="small muted">(${L.human.length}👤 ${L.auto.length}🤖)</span></td>
       <td>${lastRes}</td><td class="small">${lastBy}</td>
       <td><select class="status" data-id="${L.id}" data-cur="${L.status}" onclick="event.stopPropagation()">
@@ -424,11 +460,11 @@ function rowsForExport(){
     Date: new Date(L.created_at).toLocaleString('en-US'),
     Name: L.name||'', Business: L.business||'',
     Phone: L.phone||'', Email: L.email||'',
-    Type: L.type||'', Status: STATUS_LABEL[L.status]||L.status||'',
+    'Came From': sourceLabel(L).text, Type: L.type||'', Status: STATUS_LABEL[L.status]||L.status||'',
     'Human Touches': (L.human||[]).length, 'Auto Touches': (L.auto||[]).length,
     'Last Result': L.last ? (RES[L.last.result]?.[0]||'') : '',
     'Last Touched By': L.last ? (L.last.is_auto?'Auto':(L.last.by_name||L.last.touched_by||'')) : '',
-    'Referred By': L.referred_by||'', Message: L.message||''
+    'Referred By': refName(L.referred_by), Message: L.message||''
   }));
 }
 const stamp = () => new Date().toISOString().slice(0,10);
