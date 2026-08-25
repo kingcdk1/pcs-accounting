@@ -113,8 +113,9 @@ section{padding:52px 0;border-top:1px solid var(--border-soft);margin-top:52px;s
 /* TABLE */
 .gridwrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:rgba(14,19,33,.78)}
 table{width:100%;border-collapse:collapse;font-size:13px;min-width:820px}
-th{background:rgba(212,176,102,.1);color:var(--gold);text-align:left;padding:13px 14px;font-weight:700;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;border-bottom:1px solid var(--gold-line);white-space:nowrap}
-td{padding:11px 14px;border-bottom:1px solid var(--border-soft);color:var(--text-dim);vertical-align:top}
+th{background:rgba(212,176,102,.1);color:var(--gold);text-align:left;padding:12px 12px;font-weight:700;font-size:11px;letter-spacing:1.1px;line-height:1.35;text-transform:uppercase;border-bottom:1px solid var(--gold-line);vertical-align:bottom}
+th .cn{display:block;font-size:10px;letter-spacing:1.8px;color:var(--gold-light);opacity:.62;margin-bottom:3px}
+td{padding:11px 12px;border-bottom:1px solid var(--border-soft);color:var(--text-dim);vertical-align:top}
 td:first-child{color:var(--text);font-weight:600;white-space:nowrap}
 tr:last-child td{border-bottom:0}
 .yes{color:var(--green)}.no{color:var(--red)}.mid{color:var(--gold)}
@@ -314,7 +315,7 @@ footer a{color:var(--gold);text-decoration:none;font-weight:600}
     <h2 class="sec-h">The Master Grid</h2>
     <p class="sec-lede">Everything above, side by side. Green means it works in your favor; red means it costs you.</p>
     <div class="gridwrap"><table>
-      <thead><tr><th></th><th>01 Single-Member LLC</th><th>02 Single-Member + S</th><th>03 Multi-Member LLC</th><th>04 Multi-Member + S</th><th>05 C Corporation</th><th>06 Corporation + S</th></tr></thead>
+      <thead><tr><th></th><th><span class="cn">01</span>Single-Member LLC</th><th><span class="cn">02</span>Single-Member + S</th><th><span class="cn">03</span>Multi-Member LLC</th><th><span class="cn">04</span>Multi-Member + S</th><th><span class="cn">05</span>C Corporation</th><th><span class="cn">06</span>Corporation + S</th></tr></thead>
       <tbody>
         <tr><td>Self-employment tax</td><td class="no">All profit</td><td class="yes">Wages only</td><td class="no">All profit</td><td class="yes">Wages only</td><td class="yes">N/A</td><td class="yes">Wages only</td></tr>
         <tr><td>Payroll required</td><td class="yes">No</td><td class="no">Yes</td><td class="yes">No</td><td class="no">Yes</td><td class="no">Yes</td><td class="no">Yes</td></tr>
