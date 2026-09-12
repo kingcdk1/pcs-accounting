@@ -149,27 +149,52 @@
     </div>
 
     <div class="card">
-      <h2>Instructions &amp; Training</h2>
+      <h2>Instructions &amp; Training <span class="muted small">— last updated 09/12/26</span></h2>
       <div class="note">
-        1. Every application (website form or Facebook) lands here automatically AND emails the people toggled ON above.<br>
-        2. Click a lead → its touch history opens. Log EVERY contact attempt: pick channel (Text/Email/Call), pick result (No Reply / Reply / ✅ Successful), add a note, Log Touch. Your name is recorded automatically.<br>
-        3. NOTES ARE REQUIRED: you cannot log a touch, change a status, or archive without writing a note. Pin important notes with the Pin button — pinned notes stay at the top.<br>
-        3b. Deleting: leads NEVER delete directly — Archive first (note required). Only an ADMIN can permanently delete an archived lead.<br>
-        3c. The counter tracks HUMAN touches out of 8. If a lead replies, the count pauses (engaged). 8 human touches with no engagement → the lead auto-moves to REMARKETING. Leads are never deleted.<br>
-        4. Statuses: New → Contacted → Show → Filed. Special: HOT, Duplicate, Management Review, Remarketing, Jail. Same ladder as the Giveaway board.<br>
-        5. EXPORTS (CSV / Excel / PDF buttons) are ADMIN-ONLY — staff will not see them.<br>
-        5a. CAME FROM: every lead shows how it arrived - Website form, Landing page, Facebook/IG ad, Calendar booking, or Referral (QR code / referral link) with the referrer name (first name + last initial).<br>
-        5b. SUGGESTIONS &amp; ISSUES: tap the 💡 button (bottom right) to report anything wrong or ideas — your name and time are stamped automatically. Admins/devs Acknowledge, then Mark Fixed; fixed items stay listed 7 days.<br>
-        6. To change who gets the emails: admins use "Where Leads Go" — no developer needed.<br>
-        7. NEW-LEAD SOUND: while the board is open it checks for new leads every 30 seconds - a chime + banner fires the moment one lands (browser may stay silent until your first click on the page).<br>
-        8. Sign-in is your Gmail. If you can sign in but see nothing, an admin needs to approve your profile.
+        <strong style="color:var(--gold-soft)">GETTING IN</strong><br>
+        1. Sign-in is your Gmail — tap "Sign in with Google". Use the same Google account every time; your touches are recorded under it.<br>
+        2. If you can sign in but the board is empty, you are in but not approved yet — an admin has to approve your profile. Tell an admin, do not keep re-signing in.<br>
+        3. If a gold banner says the board was UPDATED, tap it. It means a new version shipped and you are looking at the old one. Never work a lead on the old version.<br><br>
+
+        <strong style="color:var(--gold-soft)">WHERE LEADS COME FROM</strong><br>
+        4. Every application lands here automatically AND emails the people toggled ON in "Where Leads Go". Nothing is typed in by hand.<br>
+        5. Sources that feed this board: the website form, the landing page, Facebook/Instagram lead ads, calendar bookings, and referrals.<br>
+        6. CAME FROM tells you how each lead arrived — Website form, Landing page, Facebook/IG ad, Calendar booking, or Referral. A referral also shows who sent it (first name + last initial).<br>
+        7. YOUR OWN REFERRAL LINK: open the <a href="refer.html" style="color:var(--gold-soft)">Refer page</a> to generate your personal link and QR code. Anyone who books through it is tagged to you and shows up in CAME FROM with your name. Print the QR or text the link.<br><br>
+
+        <strong style="color:var(--gold-soft)">WORKING A LEAD</strong><br>
+        8. Click a lead → its touch history opens. Log EVERY contact attempt: pick channel (Text/Email/Call), pick result (No Reply / Reply / Successful), add a note, Log Touch. Your name is recorded automatically.<br>
+        9. NOTES ARE REQUIRED. You cannot log a touch, change a status, or archive without writing a note. Write what actually happened, not "called".<br>
+        10. Pin important notes with the Pin button — pinned notes stay at the top so the next person sees them first.<br>
+        11. Notes are APPEND-ONLY. Editing a note is flagged and logged; the original is never lost. Correct by adding a new note, do not try to hide a mistake.<br>
+        12. THE 8-TOUCH COUNTER tracks HUMAN touches out of 8. If the lead replies, the count pauses — they are engaged, keep working them. 8 human touches with no engagement moves the lead to REMARKETING automatically.<br>
+        13. Statuses: New → Contacted → Show → Filed. Special: HOT, Duplicate, Management Review, Remarketing, Jail. Same ladder as the Giveaway board — if you know that board, you know this one.<br><br>
+
+        <strong style="color:var(--gold-soft)">ARCHIVING AND DELETING</strong><br>
+        14. Leads NEVER delete directly. Archive first, and a note is required.<br>
+        15. Only an ADMIN can permanently delete an already-archived lead. Everyone else sees "Archived — only an admin can delete."<br>
+        16. "Show archived" appears at the top right of the leads card whenever archived leads exist — use it to pull them back up.<br><br>
+
+        <strong style="color:var(--gold-soft)">TOOLS ON THE TOP BAR</strong><br>
+        17. SOUND: if the button says "Sound: tap to enable", tap it once. Browsers stay silent until you interact with the page. The board checks for new leads every 30 seconds and fires a chime + banner the moment one lands.<br>
+        18. BRIEFING: tap Briefing to see today's numbers on demand — the same briefing that emails out every morning at 7 AM CT. Everyone can open it.<br>
+        19. REFRESH re-pulls from the database. Sign out ends your session.<br>
+        20. EXPORTS (CSV / Excel / PDF) are ADMIN-ONLY. If you do not see those buttons, that is correct — nothing is broken.<br><br>
+
+        <strong style="color:var(--gold-soft)">REPORTING A PROBLEM</strong><br>
+        21. Tap the 💡 button (bottom right) to report anything wrong, confusing, or an idea. Your name and the time are stamped automatically. Use it — it is the fastest way to get something fixed.<br>
+        22. Lifecycle: OPEN → ACKNOWLEDGED → FIXED. Fixed items stay listed 7 days so you can see it actually got handled. Nothing is ever deleted.<br>
+        23. Admins: to change who gets the lead emails, use "Where Leads Go". Toggle OFF keeps the person saved but stops their emails. No developer needed.<br><br>
+
+        <strong style="color:var(--gold-soft)">CLIENT-FACING TOOL WORTH KNOWING</strong><br>
+        24. The <a href="entity.html" style="color:var(--gold-soft)">Entities guide</a> on the public site answers "what entity should I be?" — five questions, then the recommendation, plus all six structures side by side. Send it to anyone who is unsure whether they need an LLC, an S election, or a corporation. It is a real closing tool, not a brochure.
       </div>
     </div>
   </div>
 </div>
 
 <script>
-const BUILD_V = '2026-08-02-2'; // bumped every deploy together with version.json
+const BUILD_V = '2026-09-12-1'; // bumped every deploy together with version.json
 const SB_URL  = 'https://mxuenhsdknlevlytneku.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14dWVuaHNka25sZXZseXRuZWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMDAyNzMsImV4cCI6MjA5ODc3NjI3M30.5pNV45oYV17jGgtvcNaD-Tsnr9Kqll9SgNtRPsNwaBw';
 const db = supabase.createClient(SB_URL, SB_ANON);
